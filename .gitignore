@@ -1,0 +1,12 @@
+node_modules/
+.vitepress/cache/
+.vitepress/dist/
+
+# Local environment and editor files
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+.idea/
+.vscode/

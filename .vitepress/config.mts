@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { mermaidMarkdownPlugin } from './mermaid.ts'
 import { createContentNavigation } from './sidebar.ts'
 
 const { nav, sidebar } = createContentNavigation()
@@ -14,7 +15,10 @@ export default defineConfig({
 
   markdown: {
     math: true,
-    lineNumbers: true
+    lineNumbers: true,
+    config: (md) => {
+      md.use(mermaidMarkdownPlugin)
+    }
   },
 
   themeConfig: {

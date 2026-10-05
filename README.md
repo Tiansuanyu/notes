@@ -4,7 +4,7 @@
 
 ## 本地写笔记
 
-需要 Node.js 22 或更高版本，推荐使用仓库 `.nvmrc` 指定的 Node.js 24。
+需要 Node.js 22.12 或更高版本，推荐使用仓库 `.nvmrc` 指定的 Node.js 24。
 
 ```bash
 npm install
@@ -77,6 +77,14 @@ Repository → Settings → Pages → Build and deployment → Source → GitHub
 
 行内公式使用 `$...$`，块公式使用 `$$...$$`。站点通过 VitePress 官方支持的 MathJax 集成渲染公式。
 
-## Mermaid（TODO）
+## Mermaid
 
-当前没有加入 Mermaid，以避免为默认主题引入额外插件和较大的前端依赖。需要流程图时，可后续评估 `vitepress-plugin-mermaid` 与当前 VitePress 版本的兼容性，再安装并在 `.vitepress/config.mts` 中启用。
+直接使用 `mermaid` fenced code block 即可插入图表，图表会自动适配网站的亮色和暗色主题：
+
+````markdown
+```mermaid
+flowchart LR
+  A[输入] --> B[处理]
+  B --> C[输出]
+```
+````

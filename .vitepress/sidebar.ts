@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from 'node:fs'
-import { dirname, extname, relative, resolve } from 'node:path'
+import { basename, dirname, extname, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { DefaultTheme } from 'vitepress'
 
@@ -21,6 +21,7 @@ const acronyms = new Map([
   ['cuda', 'CUDA'],
   ['ddp', 'DDP'],
   ['gpu', 'GPU'],
+  ['hloc', 'HLoc'],
   ['pnp', 'PnP'],
   ['slam', 'SLAM'],
   ['sql', 'SQL'],
@@ -29,6 +30,7 @@ const acronyms = new Map([
 
 interface PageInfo {
   fileName: string
+  isIndex: boolean
   link: string
   order?: number
   text: string
@@ -62,27 +64,28 @@ function unquote(value: string): string {
 
 function getPageInfo(filePath: string, link: string): PageInfo {
   const source = readFileSync(filePath, 'utf8')
-  const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] ?? ''
+  const frontmatterMatch = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)
+  const frontmatter = frontmatterMatch?.[1] ?? ''
   const frontmatterTitle = frontmatter.match(/^title:\s*(.+?)\s*$/m)?.[1]
   const orderValue = frontmatter.match(/^order:\s*(-?\d+(?:\.\d+)?)\s*$/m)?.[1]
-  const h1 = source.match(/^#\s+(.+?)\s*$/m)?.[1]
+  const markdownBody = frontmatterMatch ? source.slice(frontmatterMatch[0].length) : source
+  const h1 = markdownBody.match(/^#\s+(.+?)\s*$/m)?.[1]
   const fileName = relative(siteRoot, filePath).replaceAll('\\', '/')
+  const isIndex = basename(filePath).toLowerCase() === 'index.md'
 
   return {
     fileName,
+    isIndex,
     link,
     order: orderValue === undefined ? undefined : Number(orderValue),
     text: frontmatterTitle
       ? unquote(frontmatterTitle)
-      : h1?.trim() || humanize(filePath.split('/').at(-1) ?? '')
+      : h1?.trim() || humanize(basename(filePath))
   }
 }
 
 function comparePages(a: PageInfo, b: PageInfo): number {
-  const aIsIndex = a.fileName.endsWith('/index.md')
-  const bIsIndex = b.fileName.endsWith('/index.md')
-
-  if (aIsIndex !== bIsIndex) return aIsIndex ? -1 : 1
+  if (a.isIndex !== b.isIndex) return a.isIndex ? -1 : 1
 
   const aOrder = a.order ?? Number.POSITIVE_INFINITY
   const bOrder = b.order ?? Number.POSITIVE_INFINITY
@@ -91,36 +94,56 @@ function comparePages(a: PageInfo, b: PageInfo): number {
   return a.fileName.localeCompare(b.fileName, 'en')
 }
 
+function isContentDirectory(name: string): boolean {
+  return !name.startsWith('.') && !ignoredDirectories.has(name)
+}
+
 function containsMarkdown(directory: string): boolean {
   return readdirSync(directory, { withFileTypes: true }).some((entry) => {
     const entryPath = resolve(directory, entry.name)
-    return entry.isDirectory()
+    return entry.isDirectory() && isContentDirectory(entry.name)
       ? containsMarkdown(entryPath)
       : entry.isFile() && extname(entry.name).toLowerCase() === '.md'
   })
 }
 
-function buildItems(directory: string, routePrefix: string): DefaultTheme.SidebarItem[] {
+function buildItems(
+  directory: string,
+  routePrefix: string,
+  includeIndex = true
+): DefaultTheme.SidebarItem[] {
   const entries = readdirSync(directory, { withFileTypes: true })
   const pages = entries
     .filter((entry) => entry.isFile() && extname(entry.name).toLowerCase() === '.md')
+    .filter((entry) => includeIndex || entry.name.toLowerCase() !== 'index.md')
     .map((entry) => {
       const stem = entry.name.replace(/\.md$/i, '')
-      const link = stem === 'index' ? `${routePrefix}/` : `${routePrefix}/${stem}`
+      const link = stem.toLowerCase() === 'index' ? `${routePrefix}/` : `${routePrefix}/${stem}`
       return getPageInfo(resolve(directory, entry.name), link)
     })
     .sort(comparePages)
     .map(({ text, link }) => ({ text, link }))
 
   const groups = entries
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+    .filter((entry) => entry.isDirectory() && isContentDirectory(entry.name))
     .filter((entry) => containsMarkdown(resolve(directory, entry.name)))
     .sort((a, b) => a.name.localeCompare(b.name, 'en'))
-    .map((entry) => ({
-      text: humanize(entry.name),
-      collapsed: false,
-      items: buildItems(resolve(directory, entry.name), `${routePrefix}/${entry.name}`)
-    }))
+    .map((entry) => {
+      const childDirectory = resolve(directory, entry.name)
+      const childRoute = `${routePrefix}/${entry.name}`
+      const hasIndex = readdirSync(childDirectory, { withFileTypes: true }).some(
+        (child) => child.isFile() && child.name.toLowerCase() === 'index.md'
+      )
+
+      return {
+        text: humanize(entry.name),
+        ...(hasIndex ? { link: `${childRoute}/` } : {}),
+        collapsed: false,
+        // The group's title links to index.md, so do not duplicate that route
+        // as a child item. All deeper directories are handled recursively.
+        items: buildItems(childDirectory, childRoute, false)
+      }
+    })
 
   return [...pages, ...groups]
 }
@@ -128,8 +151,7 @@ function buildItems(directory: string, routePrefix: string): DefaultTheme.Sideba
 export function createContentNavigation(): ContentNavigation {
   const categories = readdirSync(siteRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
-    .filter((entry) => !entry.name.startsWith('.'))
-    .filter((entry) => !ignoredDirectories.has(entry.name))
+    .filter((entry) => isContentDirectory(entry.name))
     .filter((entry) => containsMarkdown(resolve(siteRoot, entry.name)))
     .sort((a, b) => a.name.localeCompare(b.name, 'en'))
 

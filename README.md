@@ -55,6 +55,8 @@ computer-vision/
 
 下一次构建会自动把它识别为顶部导航和独立侧边栏。`node_modules`、`.vitepress`、`.github`、`.git` 和 `public` 不会被识别为内容分类。
 
+分类中还可以继续创建任意层级的子目录。子目录会递归生成侧边栏分组；如果子目录包含 `index.md`，分组标题会链接到该入口页。隐藏目录（例如 `.assets`）和不包含 Markdown 的资源目录不会出现在侧边栏中。
+
 ## 发布
 
 ```bash

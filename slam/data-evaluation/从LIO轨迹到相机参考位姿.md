@@ -37,14 +37,14 @@ order: 30
 
 坐标变换、求逆、整流方向、时钟模型与 SE(3) 插值的完整推导见[多传感器时空标定](../fundamentals/多传感器时空标定.md)。本篇只保留参考 adapter 需要落实的应用链。
 
-令 W 为 LIO 世界，I 为状态 IMU，L 为原生 LiDAR frame，$C_{raw}$ 为原始左目 optical frame，$C_{rect}$ 为整流左目 frame。一个可能的链是：
+令 W 为 LIO 世界，I 为状态 IMU，L 为原生 LiDAR frame，$C_{\mathrm{raw}}$ 为原始左目 optical frame，$C_{\mathrm{rect}}$ 为整流左目 frame。一个可能的链是：
 
 $$
-T_{W\leftarrow C_{rect}}(t_C)
+T_{W\leftarrow C_{\mathrm{rect}}}(t_C)
 =T_{W\leftarrow I}(t_I)
 T_{I\leftarrow L}(t_I)
-T_{L\leftarrow C_{raw}}(t_C)
-T_{C_{raw}\leftarrow C_{rect}},
+T_{L\leftarrow C_{\mathrm{raw}}}(t_C)
+T_{C_{\mathrm{raw}}\leftarrow C_{\mathrm{rect}}},
 $$
 
 其中 $t_I$ 必须由已声明的时钟/测量时间模型与 $t_C$ 对应。每段都要说明来源、方向、是否随时间变化，以及适用的安装和 run。
@@ -53,8 +53,8 @@ $$
 
 - $T_{W\leftarrow I}$ 来自轨迹；
 - $T_{I\leftarrow L}$ 可能是 LIO 内部在线估计状态；
-- $T_{L\leftarrow C_{raw}}$ 描述外部相机安装，LIO 本身通常观测不到它；
-- $T_{C_{raw}\leftarrow C_{rect}}$ 来自整流坐标定义，不表示物理相机移动。
+- $T_{L\leftarrow C_{\mathrm{raw}}}$ 描述外部相机安装，LIO 本身通常观测不到它；
+- $T_{C_{\mathrm{raw}}\leftarrow C_{\mathrm{rect}}}$ 来自整流坐标定义，不表示物理相机移动。
 
 内参、畸变和图像尺寸属于投影模型，不是上式中的刚体安装外参。adapter 输出整流相机 Pose 时，下游必须搭配整流后的相机模型。
 
@@ -133,16 +133,27 @@ $$
 G=T_{W_r\leftarrow W_q}.
 $$
 
-Query 相机参考随后是：
+其中下标 $r$ 和 $q$ 分别表示 Reference 与 Query 序列。Reference 相机参考先展开为：
 
 $$
-T^{ref}_{W_r\leftarrow C_q}(t)
-=G\,T_{W_q\leftarrow I_q}(t)
+T^{ref}_{W_r\leftarrow C_{\mathrm{rect},r}}(t)
+=T_{W_r\leftarrow I_r}(t)
+T_{I_r\leftarrow L_r}(t)
+T_{L_r\leftarrow C_{\mathrm{raw},r}}(t)
+T_{C_{\mathrm{raw},r}\leftarrow C_{\mathrm{rect},r}}.
+$$
+
+Query 相机参考再经世界对齐变换到 $W_r$：
+
+$$
+T^{ref}_{W_r\leftarrow C_{\mathrm{rect},q}}(t)
+=G\, T_{W_q\leftarrow I_q}(t)
 T_{I_q\leftarrow L_q}(t)
-T_{L_q\leftarrow C_q}(t).
+T_{L_q\leftarrow C_{\mathrm{raw},q}}(t)
+T_{C_{\mathrm{raw},q}\leftarrow C_{\mathrm{rect},q}}.
 $$
 
-世界对齐在左边，传感器转换在右边。PCD 注册不能替代相机外参、整流和时间链。低点云残差也不是相机 Pose 误差上界，走廊、平面、重复房间、动态物体和非刚性地图形变都可能产生歧义。
+世界对齐在左边，传感器转换与整流转换在右边。两条链的结果都是各自整流左目坐标系在 $W_r$ 中的 Pose，因此才能与整流图像和相机模型逐项对应。PCD 注册不能替代相机外参、整流和时间链。低点云残差也不是相机 Pose 误差上界，走廊、平面、重复房间、动态物体和非刚性地图形变都可能产生歧义。
 
 验证应观察双侧重叠、残差空间分布、多初始化、独立正反向拟合和可视化。若反向矩阵只是正向结果求逆，再检查相乘等于单位阵只是一项代数检查。
 

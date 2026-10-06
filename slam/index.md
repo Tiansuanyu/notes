@@ -1,9 +1,9 @@
 ---
-title: SLAM
+title: SLAM Overview
 order: 0
 ---
 
-# SLAM
+# SLAM Overview
 
 这里按“感知对应 → 几何 → 地图 → 估计与标定 → 数据 → 参考 → 评估 → 实践”整理视觉定位与 SLAM 学习笔记。
 

@@ -1,8 +1,10 @@
 # Tiansuanyu's Notes
 
+> 🌐 **在线阅读：[tiansuanyu.github.io/notes](https://tiansuanyu.github.io/notes/)**
+
 一个以仓库根目录为内容目录、使用 VitePress Default Theme 构建的个人技术笔记站点。
 
-## 本地写笔记
+## 快速开始
 
 需要 Node.js 22.12 或更高版本，推荐使用仓库 `.nvmrc` 指定的 Node.js 24。
 
@@ -18,7 +20,9 @@ npm run docs:build
 npm run docs:preview
 ```
 
-## 新建笔记
+## 内容组织
+
+### 新建笔记
 
 直接在分类目录中创建 Markdown，例如：
 
@@ -51,7 +55,7 @@ sidebar: false
 ---
 ```
 
-## 新增分类
+### 新增分类
 
 直接在仓库根目录创建目录并加入 Markdown，例如：
 
@@ -64,6 +68,24 @@ computer-vision/
 下一次构建会自动把它识别为顶部导航和独立侧边栏。`node_modules`、`.vitepress`、`.github`、`.git` 和 `public` 不会被识别为内容分类。
 
 分类中还可以继续创建任意层级的子目录。子目录会递归生成侧边栏分组；如果子目录包含 `index.md`，分组标题会链接到该入口页。隐藏目录（例如 `.assets`）和不包含 Markdown 的资源目录不会出现在侧边栏中。
+
+## Markdown 扩展
+
+### 数学公式
+
+行内公式使用 `$...$`，块公式使用 `$$...$$`。站点通过 VitePress 官方支持的 MathJax 集成渲染公式。
+
+### Mermaid
+
+直接使用 `mermaid` fenced code block 即可插入图表，图表会自动适配网站的亮色和暗色主题：
+
+````markdown
+```mermaid
+flowchart LR
+  A[输入] --> B[处理]
+  B --> C[输出]
+```
+````
 
 ## 发布
 
@@ -80,19 +102,3 @@ git push
 ```text
 Repository → Settings → Pages → Build and deployment → Source → GitHub Actions
 ```
-
-## 数学公式
-
-行内公式使用 `$...$`，块公式使用 `$$...$$`。站点通过 VitePress 官方支持的 MathJax 集成渲染公式。
-
-## Mermaid
-
-直接使用 `mermaid` fenced code block 即可插入图表，图表会自动适配网站的亮色和暗色主题：
-
-````markdown
-```mermaid
-flowchart LR
-  A[输入] --> B[处理]
-  B --> C[输出]
-```
-````

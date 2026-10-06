@@ -30,6 +30,7 @@ const acronyms = new Map([
 
 interface PageInfo {
   fileName: string
+  hidden: boolean
   isIndex: boolean
   link: string
   order?: number
@@ -68,6 +69,7 @@ function getPageInfo(filePath: string, link: string): PageInfo {
   const frontmatter = frontmatterMatch?.[1] ?? ''
   const frontmatterTitle = frontmatter.match(/^title:\s*(.+?)\s*$/m)?.[1]
   const orderValue = frontmatter.match(/^order:\s*(-?\d+(?:\.\d+)?)\s*$/m)?.[1]
+  const hidden = /^sidebar:\s*false\s*$/m.test(frontmatter)
   const markdownBody = frontmatterMatch ? source.slice(frontmatterMatch[0].length) : source
   const h1 = markdownBody.match(/^#\s+(.+?)\s*$/m)?.[1]
   const fileName = relative(siteRoot, filePath).replaceAll('\\', '/')
@@ -75,6 +77,7 @@ function getPageInfo(filePath: string, link: string): PageInfo {
 
   return {
     fileName,
+    hidden,
     isIndex,
     link,
     order: orderValue === undefined ? undefined : Number(orderValue),
@@ -121,23 +124,37 @@ function buildItems(
       const link = stem.toLowerCase() === 'index' ? `${routePrefix}/` : `${routePrefix}/${stem}`
       return getPageInfo(resolve(directory, entry.name), link)
     })
+    .filter((page) => !page.hidden)
     .sort(comparePages)
     .map(({ text, link }) => ({ text, link }))
 
   const groups = entries
     .filter((entry) => entry.isDirectory() && isContentDirectory(entry.name))
     .filter((entry) => containsMarkdown(resolve(directory, entry.name)))
-    .sort((a, b) => a.name.localeCompare(b.name, 'en'))
     .map((entry) => {
       const childDirectory = resolve(directory, entry.name)
       const childRoute = `${routePrefix}/${entry.name}`
-      const hasIndex = readdirSync(childDirectory, { withFileTypes: true }).some(
+      const indexEntry = readdirSync(childDirectory, { withFileTypes: true }).find(
         (child) => child.isFile() && child.name.toLowerCase() === 'index.md'
       )
+      const indexPage = indexEntry
+        ? getPageInfo(resolve(childDirectory, indexEntry.name), `${childRoute}/`)
+        : undefined
+
+      return { childDirectory, childRoute, entry, indexPage }
+    })
+    .sort((a, b) => {
+      const aOrder = a.indexPage?.order ?? Number.POSITIVE_INFINITY
+      const bOrder = b.indexPage?.order ?? Number.POSITIVE_INFINITY
+
+      if (aOrder !== bOrder) return aOrder - bOrder
+      return a.entry.name.localeCompare(b.entry.name, 'en')
+    })
+    .map(({ childDirectory, childRoute, entry, indexPage }) => {
 
       return {
-        text: humanize(entry.name),
-        ...(hasIndex ? { link: `${childRoute}/` } : {}),
+        text: indexPage?.text ?? humanize(entry.name),
+        ...(indexPage ? { link: indexPage.link } : {}),
         collapsed: false,
         // The group's title links to index.md, so do not duplicate that route
         // as a child item. All deeper directories are handled recursively.

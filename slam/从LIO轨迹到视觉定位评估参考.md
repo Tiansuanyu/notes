@@ -27,37 +27,37 @@
 
 算法状态可能以 IMU 为中心，驱动消息可能发布另一个 frame，导出脚本还可能进行额外转换。即使父 frame 名字叫 `camera_init`，也不能仅凭名称判断数据来自相机。
 
-应查消息定义、状态变量和导出代码。本次工程审计确认轨迹为 Livox internal IMU 的世界位姿，记为 \(T_{W\leftarrow I}\)。这一结论只适用于被审计的运行与导出版本。
+应查消息定义、状态变量和导出代码。本次工程审计确认轨迹为 Livox internal IMU 的世界位姿，记为 $T_{W\leftarrow I}$。这一结论只适用于被审计的运行与导出版本。
 
 ## 2. 坐标链：把“轨迹可用”变成“相机几何可用”
 
 全文使用列向量和以下约定：
 
-\[
+$$
 \mathbf p_A=T_{A\leftarrow B}\mathbf p_B,
 \qquad
 T_{A\leftarrow B}=
 \begin{bmatrix}R_{A\leftarrow B}&\mathbf t_{A\leftarrow B}\\0&1\end{bmatrix}.
-\]
+$$
 
-平移 \(\mathbf t_{A\leftarrow B}\) 是 B 原点在 A 中的坐标。它不是不带方向的“两个传感器距离”。
+平移 $\mathbf t_{A\leftarrow B}$ 是 B 原点在 A 中的坐标。它不是不带方向的“两个传感器距离”。
 
 ### 2.1 组合与求逆
 
-\[
+$$
 T_{A\leftarrow C}=T_{A\leftarrow B}T_{B\leftarrow C},
 \qquad
 T_{B\leftarrow A}=
 \begin{bmatrix}R^T&-R^T\mathbf t\\0&1\end{bmatrix}.
-\]
+$$
 
 检查组合时，让相邻下标相消：右侧输入坐标最终必须变成左侧输出坐标。求逆不只是平移取负，必须同时旋转平移。
 
 ### 2.2 从 internal IMU 到整流相机
 
-定义：W 为 LIO 世界，I 为 LIO 状态 IMU，L 为原生 LiDAR 点云 frame，\(C_{raw}\) 为原始左目 optical frame，\(C_{rect}\) 为整流左目 frame。
+定义：W 为 LIO 世界，I 为 LIO 状态 IMU，L 为原生 LiDAR 点云 frame，$C_{raw}$ 为原始左目 optical frame，$C_{rect}$ 为整流左目 frame。
 
-\[
+$$
 \boxed{
 T_{W\leftarrow C_{rect}}(t)
 =T_{W\leftarrow I}(t)
@@ -65,11 +65,11 @@ T_{I\leftarrow L}(t)
 T_{L\leftarrow C_{raw}}(t)
 T_{C_{raw}\leftarrow C_{rect}}
 }
-\]
+$$
 
-每一段都要解释来源和有效范围。跨传感器安装若刚性，可把 \(T_{L\leftarrow C_{raw}}\) 建模为常量；存在相对运动时，真实变换可能随时间变化，常量近似必须说明限制。
+每一段都要解释来源和有效范围。跨传感器安装若刚性，可把 $T_{L\leftarrow C_{raw}}$ 建模为常量；存在相对运动时，真实变换可能随时间变化，常量近似必须说明限制。
 
-若交付矩阵是 \(T_{C_{raw}\leftarrow L}\)，需要取逆。若整流定义为 \(\mathbf p_{rect}=R_0\mathbf p_{raw}\)，则这里需要的是 \(R_0^T\)，不是直接代入 \(R_0\)。常见虚拟相机整流保持原点、只改变朝向；具体软件是否引入其他 frame 转换仍需核实。
+若交付矩阵是 $T_{C_{raw}\leftarrow L}$，需要取逆。若整流定义为 $\mathbf p_{rect}=R_0\mathbf p_{raw}$，则这里需要的是 $R_0^T$，不是直接代入 $R_0$。常见虚拟相机整流保持原点、只改变朝向；具体软件是否引入其他 frame 转换仍需核实。
 
 内参 K、畸变参数和图像尺寸属于投影模型，不是这条刚体变换链中的外参。整流后的图像应使用整流后的相机模型。
 
@@ -77,9 +77,9 @@ T_{C_{raw}\leftarrow C_{rect}}
 
 相机中心位置满足：
 
-\[
+$$
 \mathbf p_{WC}=\mathbf p_{WI}+R_{WI}\mathbf t_{IC}.
-\]
+$$
 
 即使两个原点相距不远，旋转也会使杆臂在世界中的方向改变。直接把 IMU 位置当相机位置，会引入与运动姿态相关的误差，不能靠一次固定世界平移完整补偿。
 
@@ -91,21 +91,21 @@ LIO 位姿在某些采样时刻存在，图像在另外一些时刻曝光。转�
 
 常见模型是：
 
-\[
+$$
 t_{LIO}=a\,t_{camera}+b.
-\]
+$$
 
-其中 a 表示时钟速率差，b 表示时间原点与偏移。短序列有时采用 \(a=1\) 的近似，但要有依据。把设备 boot 时间加上 epoch 偏移，只解决时钟表示问题，不自动证明曝光与 IMU 同步。
+其中 a 表示时钟速率差，b 表示时间原点与偏移。短序列有时采用 $a=1$ 的近似，但要有依据。把设备 boot 时间加上 epoch 偏移，只解决时钟表示问题，不自动证明曝光与 IMU 同步。
 
 ### 3.1 Pose 插值
 
-对满足 \(t_0\le t\le t_1\) 的样本，令 \(\alpha=(t-t_0)/(t_1-t_0)\)：
+对满足 $t_0\le t\le t_1$ 的样本，令 $\alpha=(t-t_0)/(t_1-t_0)$：
 
-\[
+$$
 \mathbf p(t)=(1-\alpha)\mathbf p_0+\alpha\mathbf p_1,
 \qquad
 q(t)=\operatorname{SLERP}(q_0,q_1,\alpha).
-\]
+$$
 
 四元数应归一化，并处理 q 与 −q 表示同一旋转的符号问题。不要直接线性插值欧拉角。位置线性加旋转 SLERP 是工程近似，不是完整运动模型；快速机动和大采样间隔可能需要更好的插值方式。
 
@@ -115,11 +115,11 @@ adapter 应限制插值括号长度、处理重复与倒退时间，并禁止未
 
 短时间内可粗略估计：
 
-\[
+$$
 \|\delta\mathbf p\|\approx\|\mathbf v\|\,|\Delta t|,
 \qquad
 \delta\theta\approx\|\boldsymbol\omega\|\,|\Delta t|.
-\]
+$$
 
 例如 2 m/s 时偏差 20 ms，可产生约 4 cm 的平移差；角速度 100°/s 时同样偏差对应约 2°。这是局部近似，还没有计入杆臂运动和 rolling shutter。
 
@@ -186,15 +186,15 @@ adapter 应限制插值括号长度、处理重复与倒退时间，并禁止未
 
 SfM 通常同时估计相机位姿与三维点；BA 可通过重投影误差联合调整两者。已知 Pose 建图则把相机位姿作为给定约束，只估计三维点、track 和关联。
 
-对 landmark \(\mathbf P_W\)，已知相机位姿的目标可写为：
+对 landmark $\mathbf P_W$，已知相机位姿的目标可写为：
 
-\[
+$$
 \min_{\mathbf P_W}
 \sum_i\rho\!\left(
 \left\|\mathbf u_i-
 \pi_i(T_{C_i\leftarrow W}\mathbf P_W)\right\|^2
 \right).
-\]
+$$
 
 优化三维点可以允许；优化 Reference 相机位姿会改变“LIO 几何固定”的实验定义。是否优化内参也必须冻结，不能让它默默吸收参考链误差。
 
@@ -202,11 +202,11 @@ SfM 通常同时估计相机位姿与三维点；BA 可通过重投影误差联�
 
 图像对应决定哪些观测进入同一 track，三角化决定 landmark 位置，过滤决定地图覆盖。因此：
 
-\[
+$$
 \text{LIO-pose-assisted map}
 \ne
 \text{全部几何与关联均由 LiDAR 直接提供的 map}.
-\]
+$$
 
 若所有方法使用同一兼容地图，主要比较在线检索和匹配；若不同方法各自建图，则比较的是包含地图构建在内的完整 pipeline。两者都可以有价值，但不能把后一种结论解释成纯在线 matcher 的优劣。
 
@@ -220,21 +220,21 @@ SP、RDD 或 dense matcher 的观测身份、坐标和关联接口不同。强�
 
 ## 6. 跨序列评分：左乘世界对齐，右乘传感器转换
 
-Reference 和 Query 独立运行 LIO，通常有不同世界 \(W_r\)、\(W_q\)。冻结 PCD 注册得到：
+Reference 和 Query 独立运行 LIO，通常有不同世界 $W_r$、$W_q$。冻结 PCD 注册得到：
 
-\[
+$$
 G=T_{W_r\leftarrow W_q}.
-\]
+$$
 
 Query 相机评分参考为：
 
-\[
+$$
 T^{ref}_{W_r\leftarrow C_q}(t)
 =G\,T_{W_q\leftarrow I_q}(t)
 T_{I_q\leftarrow L_q}(t)
 T_{L_q\leftarrow C_{raw,q}}(t)
 T_{C_{raw,q}\leftarrow C_{rect,q}}.
-\]
+$$
 
 **世界对齐在左边，传感器转换在右边。** 两者解决不同问题，不能相互替代。
 
@@ -280,31 +280,31 @@ Query LIO 不进入检索、候选排序、PnP 初始化、接受判断或筛帧
 
 ### 8.1 常见定位指标
 
-设 \(N_{all}\) 为全部 Query 数，\(N_{eval}\) 为具有冻结参考、可以评价正确性的 Query 数，\(N_A\) 为其中被接受的数量，\(N_{AS}\) 为被接受且满足 S 阈值的数量，\(N_{AD}\) 为被接受且超过危险错误 C 边界的数量。一组明确的定义是：
+设 $N_{all}$ 为全部 Query 数，$N_{eval}$ 为具有冻结参考、可以评价正确性的 Query 数，$N_A$ 为其中被接受的数量，$N_{AS}$ 为被接受且满足 S 阈值的数量，$N_{AD}$ 为被接受且超过危险错误 C 边界的数量。一组明确的定义是：
 
-\[
+$$
 \mathrm{Recall}_S=\frac{N_{AS}}{N_{eval}},\qquad
 \mathrm{Precision}_S=\frac{N_{AS}}{N_A},
-\]
+$$
 
-\[
+$$
 \mathrm{FA}_{all}=\frac{N_{AD}}{N_{eval}},\qquad
 \mathrm{FA}_{acc}=\frac{N_{AD}}{N_A}.
-\]
+$$
 
-这里的 \(N_A\) 只统计“accepted 且具有参考”的帧；输出率与 Accepted 率还应分别以 \(N_{all}\) 报告。若 S 定义为 0.5 m／10°，C 定义为超过 1 m／20°，落在两者之间的帧既不是 S 成功，也不是危险 FP，因此不能用 \(N_A-N_{AS}\) 代替 \(N_{AD}\)。当 \(N_A=0\) 时 Precision 与 \(\mathrm{FA}_{acc}\) 未定义，不应写成 100% 或 0%。
+这里的 $N_A$ 只统计“accepted 且具有参考”的帧；输出率与 Accepted 率还应分别以 $N_{all}$ 报告。若 S 定义为 0.5 m／10°，C 定义为超过 1 m／20°，落在两者之间的帧既不是 S 成功，也不是危险 FP，因此不能用 $N_A-N_{AS}$ 代替 $N_{AD}$。当 $N_A=0$ 时 Precision 与 $\mathrm{FA}_{acc}$ 未定义，不应写成 100% 或 0%。
 
 无参考图像如何处理也需要预先规定：保留全部图像及状态，再明确精度评估子集和覆盖率；不得按预测是否成功决定资格。
 
 ### 8.2 ATE 与 RPE
 
-在固定参考坐标中，位置误差为 \(\|\hat{\mathbf p}_i-\mathbf p_i^{ref}\|\)。相对位姿误差可以写成：
+在固定参考坐标中，位置误差为 $\|\hat{\mathbf p}_i-\mathbf p_i^{ref}\|$。相对位姿误差可以写成：
 
-\[
+$$
 E_{ij}=
 \left((T_i^{ref})^{-1}T_j^{ref}\right)^{-1}
 \left(\hat T_i^{-1}\hat T_j\right).
-\]
+$$
 
 需要说明采样间隔、缺失 Pose 的处理和参与统计的帧。只统计成功帧上的轨迹误差，会隐藏失败率，因此应与 Recall 等指标一起报告。
 
@@ -320,11 +320,11 @@ LIO 独立于视觉定位，不代表 Reference 与 Query 参考误差独立，�
 
 应记录参考组成，做外参、时间偏移和注册变换的敏感性分析。改变参数后重新建图／评分是在分析参考不确定性；不能挑选使某个方法分数最高的参数作为最终参考。
 
-若参考位置有经过证明的误差上界 \(\epsilon\)，观测误差 d 与真实误差之间有三角不等式边界：
+若参考位置有经过证明的误差上界 $\epsilon$，观测误差 d 与真实误差之间有三角不等式边界：
 
-\[
+$$
 \max(0,d-\epsilon)\le d_{true}\le d+\epsilon.
-\]
+$$
 
 普通 holdout 残差、PCD P95 或拟合差异通常不是这种经过证明的上界，不应直接套用来宣称真实精度区间。
 
@@ -334,9 +334,9 @@ LIO 独立于视觉定位，不代表 Reference 与 Query 参考误差独立，�
 
 现有 FAST-LIO 轨迹与 PCD 已经足以构成 LiDAR/LIO 层的算法参考；卡点位于从这一层生成 Reference 和 Query 相机 Pose 的外参链。原运行开启了 LiDAR–internal IMU 外参在线估计，但实际 `mat_pre` 在打包时遗漏。配置初值不能替代运行状态，adapter 因此拒绝生成相机 Pose。
 
-补发原 `mat_pre` 后，应先审计其记录阶段、时间、收敛和运行身份，而不是立即要求重跑生成 `mat_out`。若尾段稳定，可形成 provisional 的每 bag \(T_{I\leftarrow L}\)；若仍漂移或必须严格匹配 posterior，才建立完整日志的新 LIO run。
+补发原 `mat_pre` 后，应先审计其记录阶段、时间、收敛和运行身份，而不是立即要求重跑生成 `mat_out`。若尾段稳定，可形成 provisional 的每 bag $T_{I\leftarrow L}$；若仍漂移或必须严格匹配 posterior，才建立完整日志的新 LIO run。
 
-另一个独立限制是 OAK 与 Livox 非刚性固定：跨飞行不能保证同一个 \(T_{L\leftarrow C}\)，炸机或重新受力后还可能改变。重新跑 FAST-LIO 不会解决这一问题，因为 LIO 没有观测 OAK。需要逐 bag 的外参证据或敏感性分析；否则能运行定位，但相机姿态与紧阈值精度只适合作为诊断。
+另一个独立限制是 OAK 与 Livox 非刚性固定：跨飞行不能保证同一个 $T_{L\leftarrow C}$，炸机或重新受力后还可能改变。重新跑 FAST-LIO 不会解决这一问题，因为 LIO 没有观测 OAK。需要逐 bag 的外参证据或敏感性分析；否则能运行定位，但相机姿态与紧阈值精度只适合作为诊断。
 
 图像 header 也有类似层级差异：确认它直接来自相机 SDK 的原始单调时间、ROS 发布时没有重新取时，可以排除一类发布延迟；但 SDK 没说明该时间对应曝光开始、中点还是其他内部事件，所以仍不能宣称 exposure-level 同步。
 

@@ -10,7 +10,8 @@ const ignoredDirectories = new Set([
   '.github',
   '.vitepress',
   'node_modules',
-  'public'
+  'public',
+  'templates'
 ])
 
 const acronyms = new Map([

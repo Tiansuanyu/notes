@@ -10,6 +10,8 @@ order: 10
 
 本文聚焦系统组合与实验分析。全局/局部描述子、MNN、LightGlue、detector-free 和匹配密度见[视觉地点识别与图像匹配](../fundamentals/视觉地点识别与图像匹配.md)；observation/track/landmark 与 hybrid/full 通用兼容性见[地图到底存了什么](../fundamentals/地图到底存了什么.md)；PnP/RANSAC 见[从图像对应到相机位姿](../fundamentals/从图像对应到相机位姿.md)。
 
+对应的原论文主线见[论文总览的 HLoc 与结构式定位](../papers/#topic-hloc)；遇到检索失败、PnP 失败或误接受时，可从[按问题找论文](../papers/#problem-index)进入。
+
 ## 1. Pipeline 的共同骨架
 
 HLoc 组织的是层次化定位接口：全局表征先把大库缩成候选，局部前端再建立具体对应，参考观测把二维匹配接到三维地图，最后用 PnP/RANSAC 和工程 gate 输出决策。

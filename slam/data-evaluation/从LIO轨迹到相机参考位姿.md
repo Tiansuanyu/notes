@@ -10,6 +10,8 @@ order: 30
 
 这里的“参考”不等于绝对 ground truth。LIO 可以独立于被测视觉定位模块，但仍是有误差的估计器；独立于 Query 预测也不保证误差小或与地图误差不相关。
 
+关于 LIO/VIO 轨迹与 pseudo ground truth 边界的原论文，见论文总览的[经典 SLAM、VIO 与参考轨迹](../papers/#topic-slam-vio)和[评测协议、数据与参考可信度](../papers/#topic-evaluation)。
+
 ## 1. 先分清六种产物
 
 | 对象 | 主要内容 | 能解决的问题 | 单独不能证明什么 |

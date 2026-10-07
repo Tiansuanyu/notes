@@ -11,7 +11,7 @@ export default defineConfig({
   base: '/notes/',
   cleanUrls: true,
   lastUpdated: true,
-  srcExclude: ['README.md'],
+  srcExclude: ['README.md', 'templates/**'],
 
   markdown: {
     math: true,

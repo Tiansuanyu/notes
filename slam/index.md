@@ -23,12 +23,13 @@ order: 0
 7. [数据采集与交付](./data-evaluation/数据采集与交付)
 8. [数据清洗与实验输入构建](./data-evaluation/数据清洗与实验输入构建)
 9. [从 LIO 轨迹到相机参考位姿](./data-evaluation/从LIO轨迹到相机参考位姿)
-10. [定位评估方法](./data-evaluation/定位评估方法)
+10. [参考误差如何影响算法评估](./data-evaluation/参考误差如何影响算法评估)
+11. [定位评估方法](./data-evaluation/定位评估方法)
 
 ### HLoc 实践
 
-11. [如何选择视觉重定位 Pipeline](./hloc/如何选择视觉重定位Pipeline)
-12. [效果与性能权衡](./hloc/效果与性能权衡)
+12. [如何选择视觉重定位 Pipeline](./hloc/如何选择视觉重定位Pipeline)
+13. [效果与性能权衡](./hloc/效果与性能权衡)
 
 ### 论文阅读
 

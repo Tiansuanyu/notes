@@ -13,21 +13,22 @@ order: 0
 
 1. [视觉地点识别与图像匹配](./fundamentals/视觉地点识别与图像匹配)
 2. [从图像对应到相机位姿](./fundamentals/从图像对应到相机位姿)
-3. [地图到底存了什么](./fundamentals/地图到底存了什么)
-4. [状态估计与不确定性](./fundamentals/状态估计与不确定性)
-5. [多传感器时空标定](./fundamentals/多传感器时空标定)
+3. [点云配准](./fundamentals/点云配准)
+4. [地图到底存了什么](./fundamentals/地图到底存了什么)
+5. [状态估计与不确定性](./fundamentals/状态估计与不确定性)
+6. [多传感器时空标定](./fundamentals/多传感器时空标定)
 
 ### 数据与评估
 
-6. [数据采集与交付](./data-evaluation/数据采集与交付)
-7. [数据清洗与实验输入构建](./data-evaluation/数据清洗与实验输入构建)
-8. [从 LIO 轨迹到相机参考位姿](./data-evaluation/从LIO轨迹到相机参考位姿)
-9. [定位评估方法](./data-evaluation/定位评估方法)
+7. [数据采集与交付](./data-evaluation/数据采集与交付)
+8. [数据清洗与实验输入构建](./data-evaluation/数据清洗与实验输入构建)
+9. [从 LIO 轨迹到相机参考位姿](./data-evaluation/从LIO轨迹到相机参考位姿)
+10. [定位评估方法](./data-evaluation/定位评估方法)
 
 ### HLoc 实践
 
-10. [如何选择视觉重定位 Pipeline](./hloc/如何选择视觉重定位Pipeline)
-11. [效果与性能权衡](./hloc/效果与性能权衡)
+11. [如何选择视觉重定位 Pipeline](./hloc/如何选择视觉重定位Pipeline)
+12. [效果与性能权衡](./hloc/效果与性能权衡)
 
 ### 论文阅读
 

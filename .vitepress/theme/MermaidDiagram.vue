@@ -61,6 +61,19 @@ watch(
       await mermaid.run({ nodes: [element] })
       if (version !== renderVersion) return
 
+      const svg = element.querySelector<SVGSVGElement>('svg')
+      const viewBoxWidth = svg?.viewBox.baseVal.width ?? 0
+
+      if (svg && viewBoxWidth > 0) {
+        // Mermaid uses width="100%", which can shrink a wide flowchart until
+        // its labels are no longer readable. Keep at least a 75% render scale;
+        // the outer block already provides horizontal scrolling when needed.
+        svg.style.setProperty(
+          '--mermaid-min-readable-width',
+          `${Math.ceil(viewBoxWidth * 0.75)}px`
+        )
+      }
+
       hasRendered.value = true
       const height = element.getBoundingClientRect().height
       if (height > 0) minHeight.value = `${Math.ceil(height)}px`
@@ -93,13 +106,16 @@ watch(
 }
 
 .mermaid-diagram.rendered {
+  justify-content: flex-start;
   min-width: 0;
   opacity: 1;
 }
 
 .mermaid-diagram :deep(svg) {
+  min-width: var(--mermaid-min-readable-width, 0);
   max-width: 100%;
   height: auto;
+  margin-inline: auto;
 }
 
 .mermaid-error {

@@ -11,3 +11,5 @@ order: 30
 
 - [如何选择视觉重定位 Pipeline](./如何选择视觉重定位Pipeline)
 - [效果与性能权衡](./效果与性能权衡)
+
+若要理解 HLoc 与带时序状态、记忆管理和位姿图的在线系统有什么差异，继续阅读 [RTAB-Map 与 HLoc 的定位链对比](../rtabmap/RTAB-Map与HLoc的定位链对比.md)。

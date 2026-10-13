@@ -8,7 +8,7 @@ order: 40
 
 这一页负责“找论文、定顺序、记进度”；单篇阅读笔记负责分析论文的任务、机制、证据和边界；现有基础笔记继续主讲通用原理。三者通过链接连接，不重复维护同一份完整内容。
 
-本清单整理于 2026-10-07，共 50 篇主清单论文。论文编号是稳定身份，不随当前阅读顺序改变。P0/P1/P2 只表示针对当前室内视觉重定位任务的阅读建议，不是论文质量等级：
+本清单初版整理于 2026-10-07，现共 52 篇主清单论文。论文编号是稳定身份，不随当前阅读顺序改变。P0/P1/P2 只表示针对当前室内视觉重定位任务的阅读建议，不是论文质量等级：
 
 - **P0：当前精读。** 直接帮助理解现有系统或解释实验，不要求同时复现。
 - **P1：相关拓展。** 先读摘要、方法图、实验设置与局限，遇到对应问题再深入。
@@ -206,6 +206,19 @@ Recall@K 的“正确候选”可能只是位置接近，不代表具备足够�
 
 [gsplat](https://github.com/nerfstudio-project/gsplat) 是通用计算库；读其 CUDA 实现与读一个 SLAM/重定位系统论文是不同层次的工作。
 
+<span id="topic-rtabmap"></span>
+
+### J：RTAB-Map、回环与长期记忆（2 篇）
+
+配套知识：[回环检测与位姿图优化](../fundamentals/回环检测与位姿图优化.md)、[地图与记忆管理](../rtabmap/地图与记忆管理.md)和[定位与重定位流程](../rtabmap/定位与重定位流程.md)。
+
+| 编号 / 优先级 | 论文 | 年份 / 发表 | 核心阅读问题 | 入口 | 状态 | 我的笔记 |
+| --- | --- | --- | --- | --- | --- | --- |
+| <span id="paper-j01"></span>**J01 · P0** | *Appearance-Based Loop Closure Detection for Online Large-Scale and Long-Term Operation* | 2013 · IEEE T-RO 29(3), 734–745 | WM/LTM 记忆管理怎样把在线回环计算限制在长期运行预算内？外观地点假设、节点迁移和旧区域召回分别解决什么问题？ | [论文 / IEEE](https://ieeexplore.ieee.org/document/6459608) · [DOI](https://doi.org/10.1109/TRO.2013.2242375) | 未读 | — |
+| <span id="paper-j02"></span>**J02 · P0** | *RTAB-Map as an Open-Source Lidar and Visual Simultaneous Localization and Mapping Library for Large-Scale and Long-Term Online Operation* | 2019 · Journal of Field Robotics 36(2), 416–446；online 2018 | RTAB-Map 怎样把视觉/LiDAR odometry、回环、图优化、地图生成和长期运行组织成可配置系统？论文中的配置与当前源码版本有哪些边界？ | [论文 / Wiley](https://onlinelibrary.wiley.com/doi/10.1002/rob.21831) · [项目](https://introlab.github.io/rtabmap/) | 未读 | — |
+
+J01 重点读长期回环检测的记忆机制，J02 建立完整系统视角。论文解释设计动机，具体默认参数和失败分支仍以锁定源码与实际配置为准。
+
 ## 按问题找论文
 
 <span id="problem-index"></span>
@@ -220,12 +233,13 @@ Recall@K 的“正确候选”可能只是位置接近，不代表具备足够�
 | Recall 提高但整体时延变差 | [B01](#paper-b01)、[C11](#paper-c11)、[D05](#paper-d05) / [D07](#paper-d07) | top-K、提取、匹配、PnP 与数据搬运分别占多少成本？ |
 | 想超越只选 Reference 图像的定位方式 | [B03](#paper-b03) / [B04](#paper-b04)、[F02](#paper-f02)、[I04](#paper-i04) | 视图合成、特征优化或场景坐标回归提供什么替代路线？ |
 | 想看学习模块怎样进入完整 SLAM | [A02](#paper-a02) / [A03](#paper-a03)、[H01](#paper-h01) / [H06](#paper-h06) | 系统状态、数据关联、回环、优化和恢复分别如何实现？ |
+| 长期地图增大后，怎样控制在线回环和内存预算 | [J01](#paper-j01) / [J02](#paper-j02) | WM/LTM 迁移、旧节点召回、图优化和传感器配置分别承担什么职责？ |
 
 ## 辅助解读与背景资料
 
 PaperNotes 只是辅助筛选和理解的入口，不能替代原论文。已确认的对应页面已放入 [C10](#paper-c10)、[C11](#paper-c11)、[E03](#paper-e03)、[H06](#paper-h06) 和 [I04](#paper-i04) 的“入口”列。网站分类有时不能准确反映任务，检索时可用 `visual localization`、`camera relocalization`、`visual place recognition`、`local feature matching`、`scene coordinate regression`、`loop closure`、`visual-inertial` 和 `Gaussian SLAM` 等关键词。
 
-有价值的实现与背景入口（不计入 50 篇）：
+有价值的实现与背景入口（不计入 52 篇）：
 
 - [DBoW2](https://github.com/dorian3d/DBoW2)：官方仓库列出 *Bags of Binary Words for Fast Place Recognition in Image Sequences* 与 *Real-Time Loop Detection with Bags of Binary Words*。用于理解 ORB 系统中的词袋检索、时间一致性和几何验证；地点检索与完整回环不是同一件事。
 - [OpenVINS 文档](https://docs.openvins.com/)：补 MSCKF、外参、时间偏移与状态一致性；文档是实现资料，不替代论文引用。
@@ -240,4 +254,4 @@ PaperNotes 只是辅助筛选和理解的入口，不能替代原论文。已确
 3. 在本页对应稳定编号中更新“状态”和“我的笔记”链接；论文元信息仍以本页为主清单。
 4. 自动 sidebar 会显示 `slam/papers/` 下真实存在的 Markdown 笔记；可用 frontmatter `order` 调整顺序，无需手写导航。
 
-不需要按顺序读完全部 50 篇，也不需要为每个模型重新搭建环境。先用核心 12 篇建立可解释当前实验的知识链，其他条目在对应问题出现时查阅。
+不需要按顺序读完全部 52 篇，也不需要为每个模型重新搭建环境。先用核心 12 篇建立可解释当前实验的知识链，其他条目在对应问题出现时查阅。

@@ -35,8 +35,9 @@ order: 0
 ### RTAB-Map
 
 15. [地图与记忆管理](./rtabmap/地图与记忆管理)
-16. [定位与重定位流程](./rtabmap/定位与重定位流程)
-17. [RTAB-Map 与 HLoc 的定位链对比](./rtabmap/RTAB-Map与HLoc的定位链对比)
+16. [建图过程与地图更新](./rtabmap/建图过程与地图更新)
+17. [定位与重定位流程](./rtabmap/定位与重定位流程)
+18. [RTAB-Map 与 HLoc 的定位链对比](./rtabmap/RTAB-Map与HLoc的定位链对比)
 
 RTAB-Map 专题把前面的检索、几何、地图和图优化知识连接成在线定位链，并与 HLoc 的单图像定位流程作横向比较。
 

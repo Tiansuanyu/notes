@@ -1,7 +1,7 @@
 ---
 title: RTAB-Map 与 HLoc 的定位链对比
 description: 对齐两套定位链的地图、候选、几何、状态和输出契约，避免按模块名称误类比。
-order: 30
+order: 40
 ---
 
 # RTAB-Map 与 HLoc 的定位链对比

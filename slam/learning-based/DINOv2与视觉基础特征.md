@@ -13,12 +13,12 @@ DINOv2 首先是图像编码器：它把图像变成可迁移的全局与 patch 
 
 ViT 将图像切为 patch，投影后输入 Transformer。以 patch 边长 14、输入 $518\times518$ 为例，每边 37 个 patch，共 1369 个 patch token。若隐藏宽度为 $D$，局部特征形状近似为 $[B,1369,D]$；class token 或聚合后的 $[B,D]$ 可作为图像级表示。
 
-```text
-RGB [B,3,H,W]
-  -> patch projection + position information
-  -> ViT blocks
-  -> class/register token: image-level feature
-  -> patch tokens: spatial feature grid
+```mermaid
+flowchart LR
+    I["RGB 图像<br/>[B, 3, H, W]"] --> P["Patch projection<br/>加入位置信息"]
+    P --> V["ViT blocks"]
+    V --> G["Class / register token<br/>图像级特征"]
+    V --> L["Patch tokens<br/>空间特征网格"]
 ```
 
 精确输入尺寸、register token 和返回层由模型变体/API 决定。通用 shape 与 attention 推导见[张量、算子与神经网络计算](../../ai-infra/张量、算子与神经网络计算.md)和 [Transformer 与 Vision Transformer（ViT）](../../ai-infra/Transformer与VisionTransformer（ViT）.md)。

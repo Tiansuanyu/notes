@@ -17,9 +17,18 @@ order: 50
 
 自回归模型在 prefill 阶段一次处理已有上下文，为每层生成 K/V；decode 每次追加新 token。若不缓存，第 $t$ 步会重新计算前 $t-1$ 个 token 的 K/V；缓存后只计算新 token，再读取历史 K/V：
 
-```text
-without cache:  tokens[0:t] -> K[0:t], V[0:t]
-with cache:     token[t]    -> K[t],   V[t] + reuse K/V[0:t-1]
+```mermaid
+flowchart TB
+    S["自回归模型执行第 t 步"] --> NC["不使用 KV Cache"]
+    S --> C["使用 KV Cache"]
+
+    NC --> NCI["重新输入 tokens[0:t]"]
+    NCI --> NCC["重新计算 K[0:t] 与 V[0:t]"]
+
+    C --> CI["仅输入新 token[t]"]
+    CI --> CC["计算新增 K[t] 与 V[t]"]
+    CH["复用已缓存的<br/>K/V[0:t-1]"] --> CM["组合历史与新增 K/V"]
+    CC --> CM
 ```
 
 缓存失效条件来自模型与上下文语义：权重变化、位置索引/旋转编码不一致、前缀被改写或缓存张量 dtype/layout 不兼容，都不能直接复用。分页缓存改善不等长请求的内存管理，本身不改变注意力定义。

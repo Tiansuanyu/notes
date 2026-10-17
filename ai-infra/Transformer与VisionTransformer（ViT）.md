@@ -7,9 +7,14 @@ order: 40
 
 Vision Transformer（ViT）把图像变成一串 token，再用 Transformer Encoder 让不同图像区域交换信息。理解它时，最重要的是沿着一条完整数据流追踪张量：
 
-```text
-图像 → patch 切分 → 线性嵌入 → 加入位置编码
-     → Transformer Encoder → CLS / patch 特征
+```mermaid
+flowchart LR
+    I["输入图像"] --> P["切分 patch"]
+    P --> E["线性嵌入"]
+    E --> POS["加入位置编码"]
+    POS --> ENC["Transformer Encoder"]
+    ENC --> CLS["CLS 特征"]
+    ENC --> PATCH["Patch 特征"]
 ```
 
 这也是继续学习 DINOv2、VGGT 和 LingBot-Map 的架构基础。通用的 shape、dtype、layout 与自动微分见[张量、算子与神经网络计算](./张量、算子与神经网络计算.md)。
@@ -158,4 +163,3 @@ CLS 特征汇总整幅图像上下文，适合图像分类、检索或作为全�
 
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
 - [An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929)
-

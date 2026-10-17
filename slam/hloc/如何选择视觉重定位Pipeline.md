@@ -8,7 +8,7 @@ order: 10
 
 视觉重定位选型不是挑一个“最强 matcher”，而是选择检索、局部对应、视觉地图、2D–3D 关联、鲁棒几何和接受策略的组合。某一模块输出更多对应，不表示整条链已经得到可靠地图位姿。
 
-本文聚焦系统组合与实验分析。全局/局部描述子、MNN、LightGlue、detector-free 和匹配密度见[视觉地点识别与图像匹配](../fundamentals/视觉地点识别与图像匹配.md)；observation/track/landmark 与 hybrid/full 通用兼容性见[地图到底存了什么](../fundamentals/地图到底存了什么.md)；PnP/RANSAC 见[从图像对应到相机位姿](../fundamentals/从图像对应到相机位姿.md)。若要追溯标准 SfM 地图怎样从两视图种子增长为 COLMAP `Reconstruction`，见[增量式 SfM 与稀疏地图](../colmap/增量式SfM与稀疏地图.md)。
+本文聚焦系统组合与实验分析。全局/局部描述子、MNN、LightGlue、detector-free 和匹配密度见[视觉地点识别与图像匹配](../fundamentals/视觉地点识别与图像匹配.md)；observation/track/landmark 与 hybrid/full 通用兼容性见[地图到底存了什么](../fundamentals/地图到底存了什么.md)；PnP/RANSAC 见[从图像对应到相机位姿](../fundamentals/从图像对应到相机位姿.md)。若要追溯标准 SfM 地图怎样从两视图种子增长为 COLMAP `Reconstruction`，见[增量式 SfM 与稀疏地图](./增量式SfM与稀疏地图.md)。
 
 ## 1. Pipeline 的共同骨架
 

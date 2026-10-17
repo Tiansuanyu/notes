@@ -111,6 +111,24 @@ function containsMarkdown(directory: string): boolean {
   })
 }
 
+function containsSidebarMarkdown(directory: string): boolean {
+  return readdirSync(directory, { withFileTypes: true }).some((entry) => {
+    const entryPath = resolve(directory, entry.name)
+
+    if (entry.isDirectory() && isContentDirectory(entry.name)) {
+      return containsSidebarMarkdown(entryPath)
+    }
+
+    if (!entry.isFile() || extname(entry.name).toLowerCase() !== '.md') {
+      return false
+    }
+
+    const source = readFileSync(entryPath, 'utf8')
+    const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/)?.[1] ?? ''
+    return !/^sidebar:\s*false\s*$/m.test(frontmatter)
+  })
+}
+
 function buildItems(
   directory: string,
   routePrefix: string,
@@ -131,7 +149,9 @@ function buildItems(
 
   const groups = entries
     .filter((entry) => entry.isDirectory() && isContentDirectory(entry.name))
-    .filter((entry) => containsMarkdown(resolve(directory, entry.name)))
+    // A directory containing only compatibility redirects should keep its
+    // routes, but should not reappear as an empty sidebar group.
+    .filter((entry) => containsSidebarMarkdown(resolve(directory, entry.name)))
     .map((entry) => {
       const childDirectory = resolve(directory, entry.name)
       const childRoute = `${routePrefix}/${entry.name}`

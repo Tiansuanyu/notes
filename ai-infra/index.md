@@ -10,7 +10,7 @@ order: 0
 ## 基础计算
 
 - [张量、算子与神经网络计算](./张量、算子与神经网络计算.md)：从图像张量、布局和计算图建立计算直觉。
-- [Transformer 与视觉 Token](./Transformer与视觉Token.md)：理解 Q/K/V、多头注意力和多视图 token。
+- [Transformer 与 Vision Transformer（ViT）](./Transformer与VisionTransformer（ViT）.md)：沿 patch、嵌入、位置编码和 Encoder 理解 CLS/patch 特征。
 - [Attention、KV Cache 与高效计算](./Attention、KVCache与高效计算.md)：分清注意力语义、缓存复用和内核优化。
 
 ## 训练与适配

@@ -21,7 +21,7 @@ RGB [B,3,H,W]
   -> patch tokens: spatial feature grid
 ```
 
-精确输入尺寸、register token 和返回层由模型变体/API 决定。通用 shape 与 attention 推导见[张量、算子与神经网络计算](../../ai-infra/张量、算子与神经网络计算.md)和 [Transformer 与视觉 Token](../../ai-infra/Transformer与视觉Token.md)。
+精确输入尺寸、register token 和返回层由模型变体/API 决定。通用 shape 与 attention 推导见[张量、算子与神经网络计算](../../ai-infra/张量、算子与神经网络计算.md)和 [Transformer 与 Vision Transformer（ViT）](../../ai-infra/Transformer与VisionTransformer（ViT）.md)。
 
 ## 2. 自监督教师—学生为何能学习表示
 

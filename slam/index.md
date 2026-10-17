@@ -5,7 +5,7 @@ order: 0
 
 # SLAM Overview
 
-这里按“感知对应 → 几何 → 地图 → 回环与估计 → 标定 → 数据 → 参考 → 评估 → 离线建图与定位 → 在线系统”整理视觉定位与 SLAM 学习笔记。
+这里按“感知对应 → 几何 → 地图与估计 → 数据评估 → 离线定位 → 学习式几何 → 在线系统”整理视觉定位与 SLAM 学习笔记。
 
 ## 推荐阅读路径
 
@@ -33,16 +33,20 @@ order: 0
 14. [如何选择视觉重定位 Pipeline](./hloc/如何选择视觉重定位Pipeline)
 15. [效果与性能权衡](./hloc/效果与性能权衡)
 
-SfM/COLMAP 在这里回答 Reference 稀疏地图怎样建立，HLoc 再回答 Query 怎样在固定地图中定位。这个归类服务于阅读主线，不把 SfM 限定为 HLoc 的附属算法。
+### 学习式视觉几何
+
+16. [DINOv2 与视觉基础特征](./learning-based/DINOv2与视觉基础特征)
+17. [从匹配到前馈三维重建：以 VGGT 为主](./learning-based/从匹配到前馈三维重建)
+18. [LingBot-Map 与流式几何记忆](./learning-based/LingBot-Map与流式几何记忆)
+19. [从几何地图到语义地图](./learning-based/从几何地图到语义地图)
 
 ### RTAB-Map
 
-16. [地图与记忆管理](./rtabmap/地图与记忆管理)
-17. [视觉前端、跟踪与深度来源](./rtabmap/视觉前端、跟踪与深度来源)
-18. [建图过程与地图更新](./rtabmap/建图过程与地图更新)
-19. [里程计与外部 VIO](./rtabmap/里程计与外部VIO)
-20. [OpenVINS：状态传播与视觉更新](./rtabmap/OpenVINS状态传播与视觉更新)
-21. [定位与重定位流程](./rtabmap/定位与重定位流程)
-22. [RTAB-Map 与 HLoc 的定位链对比](./rtabmap/RTAB-Map与HLoc的定位链对比)
-
-RTAB-Map 专题把前面的检索、几何、局部里程计、地图和图优化知识连接成在线定位链，并与 HLoc 的单图像定位流程作横向比较。OpenVINS 作为独立 VIO 框架放在这条主线中，是为了说明连续局部运动来源；它不是 RTAB-Map 的全局地图或共享状态估计器。
+20. [地图与记忆管理](./rtabmap/地图与记忆管理)
+21. [视觉前端、跟踪与深度来源](./rtabmap/视觉前端、跟踪与深度来源)
+22. [建图过程与地图更新](./rtabmap/建图过程与地图更新)
+23. [里程计与外部 VIO](./rtabmap/里程计与外部VIO)
+24. [OpenVINS：状态传播与视觉更新](./rtabmap/OpenVINS状态传播与视觉更新)
+25. [定位与重定位流程](./rtabmap/定位与重定位流程)
+26. [危险误接受防护与恢复](./rtabmap/危险误接受防护与恢复)
+27. [RTAB-Map 与 HLoc 的定位链对比](./rtabmap/RTAB-Map与HLoc的定位链对比)

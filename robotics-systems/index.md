@@ -17,7 +17,7 @@ order: 0
 
 ## 专题
 
-- [端侧部署](./deployment/)：Firefly CAM-3576Q38、BSP、RKNN 与持续性能。
+- [端侧部署](./deployment/)：学习式视觉模块的系统接入、Python/C++/worker 边界、CPU/GPU/NPU 分工、RKNN、测量与诊断实践。
 - [世界模型与学习式导航](./world-models/)：世界模型的系统边界，以及 DiffWAM 的轨迹提案与异步执行。
 
 ## 推荐顺序

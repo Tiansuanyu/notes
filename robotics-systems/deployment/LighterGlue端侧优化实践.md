@@ -12,7 +12,7 @@ LighterGlue 的算法结构见[从 MNN 到 LightGlue 与 LighterGlue](../../slam
 
 ## 1. 先固定“你正在优化哪个模型”
 
-本文核对的公开 XFeat 专用实现固定在 `verlab/accelerated_features` 提交 [`e92685f`](https://github.com/verlab/accelerated_features/blob/e92685f57f8318b18725c5c8c0bd28c7fe188d9a/modules/lighterglue.py)。该封装使用 XFeat 64 维输入描述子、96 维内部 descriptor、6 层、1 个 attention head，默认关闭 depth early stopping、启用 width pruning，加载单独发布的 `xfeat-lighterglue.pt`。
+本文核对的公开 XFeat 专用实现固定在 `verlab/accelerated_features` 提交 [`e92685f`](https://github.com/verlab/accelerated_features/blob/e92685f57f8318b18725c5c8c0bd28c7fe188d9a/modules/lighterglue.py)。该封装使用 XFeat 64 维输入描述子、96 维内部 descriptor、6 层、1 个 attention head，并设置 `depth_confidence=-1`、`width_confidence=0.95`：前者关闭深度提前退出，后者允许宽度剪枝，但具体请求是否真的触发剪枝，还取决于依赖版本的点数阈值和执行路径。该封装加载单独发布的 `xfeat-lighterglue.pt`。
 
 这些是该 commit 的实现事实，不是所有名为 LighterGlue 的代码都具有的永久参数。部署前还要固定 Kornia/LightGlue 实现，因为真正的 attention、assignment、剪枝和退出逻辑来自依赖库。
 

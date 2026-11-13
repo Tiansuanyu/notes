@@ -3,7 +3,6 @@ layout: home
 
 hero:
   name: "Tiansuanyu's Notes"
-  text: Mathematics · Computer Systems · SLAM · Robotics Systems · AI Infra
   tagline: Personal technical notes and learning records.
   actions:
     - theme: brand

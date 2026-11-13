@@ -37,6 +37,8 @@ flowchart TB
 
 FlashAttention 对精确注意力做分块，减少高带宽内存与片上存储之间的往返，目标是 IO-aware 的速度和显存改进；它并不等于稀疏近似。FlashInfer 更面向推理服务的 attention、sampling 与分页 KV 等 kernel。两者是否更快取决于 GPU 架构、dtype、head 维、序列长度和集成版本，不能把某张卡的 benchmark 外推到 NPU。
 
+昇腾 NPU 上的具体映射还要协调 Cube 矩阵计算、Vector softmax、L1/L0/UB 和跨流水同步，详见 [Attention Kernel](./kernel-engineering/attention-kernels.md)。算法递推可以复用，GPU thread/block 与 NPU C/V 数据流不能直接互换。
+
 ## 4. 视觉流式状态不是 LLM KV cache
 
 视觉逐帧模型也会缓存 token，但有效类比要求：新帧以因果方式追加；旧 token 的位置与坐标语义稳定；后续层允许复用既有 K/V。若每帧都重新归一化全局坐标、修改旧帧特征或双向注意全部视图，旧缓存可能需要重算。

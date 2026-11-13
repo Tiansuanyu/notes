@@ -28,6 +28,16 @@ order: 0
 - [数值精度、量化与结果验证](./数值精度、量化与结果验证.md)：连接数值误差、任务指标和定位决策。
 - [模型导出、异构推理与性能测量](./模型导出、异构推理与性能测量.md)：串起导出图、运行时、硬件映射和端到端计时。
 
+## Tensor Kernel 工程
+
+- [Kernel 编程模型](./kernel-engineering/kernel-programming-model.md)：理解 TileLang 的 kernel、tensor、scope、copy 与 GEMM 抽象为何存在。
+- [GEMM Kernel](./kernel-engineering/gemm-kernels.md)：把矩阵乘法映射到昇腾 GM、L1、L0 与 Cube。
+- [Attention Kernel](./kernel-engineering/attention-kernels.md)：用在线 softmax 理解 Cube/Vector 协作和片上容量约束。
+- [数据搬运与软件流水](./kernel-engineering/memory-and-pipelining.md)：连接 double buffering、slot ownership 和 `T.Pipelined`。
+- [Kernel 性能分析](./kernel-engineering/kernel-performance.md)：区分计算、带宽、延迟、同步和端到端瓶颈。
+
+硬件基础集中在 [异构计算](../computer-systems/heterogeneous-computing/)，编译链见 [张量编译器](../computer-systems/compilers/tensor-compilers.md)，固定源码审计见 [TileLang-Ascend](../computer-systems/case-studies/tilelang-ascend/)。
+
 ## 推荐顺序
 
-先读张量与 Transformer，再读训练、LoRA 和并行训练，最后进入精度量化、缓存优化与模型导出。
+模型主线先读张量与 Transformer，再读训练、LoRA 和并行训练，最后进入精度量化、缓存优化与模型导出。系统主线则按“异构硬件 → Kernel 编程 → GEMM → Attention → 张量编译器”阅读。

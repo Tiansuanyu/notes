@@ -1,12 +1,12 @@
 ---
 title: 源码案例
-description: 用 SPL、Lichii 与 Hookshot 连接传统编译、模拟器、静态重编译、HLE 和图形翻译。
+description: 用 SPL、Lichii、Hookshot 与 TileLang-Ascend 连接编译器、运行时和异构硬件。
 order: 60
 ---
 
 # 源码案例
 
-案例笔记负责回答“一个公开工程怎样组合通用原理”，不会替代 [基础原理](../foundations/)、[操作系统](../operating-systems/)、[编译器](../compilers/) 和 [图形与 GPU](../graphics-gpu/) 中的完整解释。
+案例笔记负责回答“一个公开工程怎样组合通用原理”，不会替代 [基础原理](../foundations/)、[操作系统](../operating-systems/)、[编译器](../compilers/)、[图形与 GPU](../graphics-gpu/) 和 [异构计算](../heterogeneous-computing/) 中的完整解释。
 
 先读 [CS323 SPL 编译器](./cs323-spl-compiler/) 建立源码、AST、TAC 与 MIPS 的传统编译闭环，再比较输入已经是机器码时的 Lichii 与 Hookshot。SPL 案例使用仓库自带 factorial artifact，明确区分真实输出和手工压缩示意。
 
@@ -32,3 +32,7 @@ order: 60
 6. 哪些结论是通用原理，哪些只是当前工程的实现选择？
 
 具体页面固定公开 commit，并链接文件或函数所在路径。时间相关的兼容状态只作为对应版本的观察，不写成永久能力声明。
+
+## NPU Tensor Compiler 案例
+
+[TileLang-Ascend](./tilelang-ascend/) 从另一种输入出发：它不是翻译 Guest ISA，而是把 Tensor DSL 解析为 TIR，经 layout、pipeline、memory planning 和 synchronization passes，生成 AscendC/PTO kernel 并由运行时启动。该案例同时单独对照 `npuir` 分支，避免把 MLIR/HIVM 路线与 AscendC/PTO 路线混写。

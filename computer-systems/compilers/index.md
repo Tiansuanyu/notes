@@ -42,6 +42,8 @@ flowchart LR
 13. [JIT 与 AOT](./jit-and-aot.md)：翻译时机与代码缓存的系统取舍。
 14. [Binary Lifting](./binary-lifting.md)：输入已经是机器码时，怎样恢复控制流和语义。
 15. [Shader Recompiler](./shader-recompilation.md)：从 GPU ISA、Shader IR 到 SPIR-V。
+16. [张量编译器](./tensor-compilers.md)：从 Tensor DSL、TIR 到硬件特化 kernel，并区分模型图编译器。
+17. [Lowering 与硬件代码生成](./lowering-and-codegen.md)：沿 TileLang-Ascend passes 理解 layout、流水、内存、同步和 AscendC/PTO codegen。
 
 这个顺序特意先建立传统编译器的语义链，再进入 Lichii、Hookshot 和 GPU 翻译案例。这样不会把“都有 IR”误解成“可以使用同一种 IR 或同一组优化”。
 
@@ -70,7 +72,7 @@ flowchart LR
 - 一个 pass 合法，不代表在所有 target 上有收益；
 - 3D Gaussian rasterizer 的 Native19 融合是一个具体 kernel 变换，必须结合[寄存器压力与实测](../graphics-gpu/gpu-kernel-optimization.md)，不能只用“少一个算子”证明更快。
 
-AI Infra 的[模型导出、异构推理与性能测量](../../ai-infra/模型导出、异构推理与性能测量.md)面对的是计算图与算子语义；这里面对的是语言与机器语义。两条链共享编译思想，但输入契约不同。
+AI Infra 的[模型导出、异构推理与性能测量](../../ai-infra/模型导出、异构推理与性能测量.md)面对的是计算图与算子语义；[Tensor Kernel 工程](../../ai-infra/kernel-engineering/)则把单个算子的 tile、layout 和数据流落实到硬件。三条链共享编译思想，但输入契约和优化范围不同。
 
 ## 主要资料入口
 

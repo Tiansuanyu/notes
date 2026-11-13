@@ -23,15 +23,16 @@ flowchart TD
     H --> S
 ```
 
-## 计划内容
+## 阅读顺序
 
-| 稳定文件名 | 核心问题 | 对源码案例的作用 |
+| 顺序 | 笔记 | 核心问题 |
 | --- | --- | --- |
-| `processes-and-threads.md` | 进程、线程、调度与上下文切换分别是什么？ | 识别模拟 CPU 线程、GPU worker 和 host 线程的责任 |
-| `virtual-memory.md` | 页表、权限、缺页、映射与地址空间如何工作？ | 理解 guest 地址、host 地址和大范围地址预留 |
-| `system-calls-and-ipc.md` | 用户态怎样请求内核或服务，参数怎样跨边界？ | 阅读 SVC、IPC 与 service dispatch |
-| `synchronization.md` | 原子操作、锁、条件变量、fence 与内存序解决什么问题？ | 分析 CPU/GPU 异步执行与跨线程资源生命周期 |
-| `hle-and-compatibility-layers.md` | HLE、系统模拟和兼容层有哪些责任与边界？ | 比较 Lichii 的运行时 HLE 与 Hookshot 的 host runtime |
+| 5 | [系统调用、句柄与 IPC](./system-calls-and-ipc.md) | 游戏怎样从普通函数调用进入 Horizon 内核与系统服务？ |
+| 6 | [HLE 与兼容层](./hle-and-compatibility-layers.md) | 为什么不运行原始 OS，也能提供足够的兼容行为？ |
+| 7 | [Guest 虚拟内存如何落到 Host](./virtual-memory.md) | guest 地址、页表状态与 host 内存怎样连接？ |
+| 8 | [同步语义、线程调度与事件](./synchronization.md) | 为什么锁、等待、唤醒和超时必须保持同一套语义？ |
+
+这里的编号承接[编译器与程序翻译](../compilers/)的前四篇。进程、线程与上下文切换还会单独展开；本组先用系统调用入口把内核对象、地址空间和同步关系串起来。
 
 ## 阅读时保留的边界
 

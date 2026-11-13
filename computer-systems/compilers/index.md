@@ -30,8 +30,9 @@ flowchart TB
 | 2 | [从 ARM64 机器码恢复程序：Binary Lifting](./binary-lifting.md) | 怎样恢复指令语义、控制流、函数、跳转表与运行时状态 |
 | 3 | [中间表示为何是翻译系统的核心](./intermediate-representation.md) | IR 如何隔离 guest 前端、优化与 host 后端 |
 | 4 | [从 Clang 到链接器：编译流水线](./compilation-pipeline.md) | Clang、LLVM、汇编器、对象文件和链接器怎样协作 |
+| 16 | [Shader Recompiler：从 GPU ISA 到 SPIR-V](./shader-recompilation.md) | Ampere 语义如何经 Maxwell frontend、Shader IR 与 SPIR-V 交给 Vulkan 驱动 |
 
-Shader 重编译仍作为后续专题；先建立这组 CPU 与程序翻译基础，再进入图形侧的指令、资源和管线语义。
+第 16 篇是完成图形与 GPU 第 9—15 篇后的跨组专题。先建立这组 CPU 翻译基础，再学习图形侧的指令、资源和管线语义，最后回到 Shader Recompiler，能更清楚地区分 guest ISA、公共 IR、SPIR-V 与 host GPU 机器码。
 
 ## 三种容易混淆的路径
 

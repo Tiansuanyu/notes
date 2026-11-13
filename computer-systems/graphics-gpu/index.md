@@ -21,17 +21,21 @@ flowchart TB
     Q --> VS
 ```
 
-## 计划内容
+## 阅读顺序
 
-| 稳定文件名 | 核心问题 | 阅读案例时的落点 |
+| 顺序 | 笔记 | 核心问题 |
 | --- | --- | --- |
-| `graphics-pipeline.md` | 顶点、图元、光栅和片元阶段如何传递数据 | 区分固定功能状态和可编程阶段 |
-| `rasterization.md` | 覆盖测试、插值、深度与混合如何产生像素 | 判断 guest 与 host 管线状态是否等价 |
-| `textures-and-sampling.md` | 纹理布局、坐标、过滤、mipmap 和格式怎样影响采样 | 读资源与 sampler 映射 |
-| `shaders.md` | Shader 阶段、接口变量、资源绑定和 SPIR-V 是什么 | 建立 shader 翻译的输入输出契约 |
-| `gpu-architecture.md` | SIMT、wave/warp、占用率与内存系统如何工作 | 理解性能，不用 CPU 线程模型生搬硬套 |
-| `vulkan-basics.md` | instance、device、queue、command buffer、pipeline 如何协作 | 读 NVN 到 Vulkan 与 renderer 后端 |
-| `gpu-memory-and-sync.md` | buffer/image、布局转换、barrier、semaphore 和 fence 约束什么 | 分析异步提交、资源可见性和生命周期 |
+| 9 | [从三维场景到最终图像](./graphics-pipeline.md) | 点云、Mesh、材质如何进入图形管线并写成图像？ |
+| 10 | [光栅化：从三角形到片元](./rasterization.md) | 覆盖、插值、深度、模板和混合分别做什么？ |
+| 11 | [纹理、采样器与 Framebuffer](./textures-and-sampling.md) | Texture、UV、Sampler、Attachment 如何连接？ |
+| 12 | [Shader：可编程 GPU 阶段](./shaders.md) | Vertex、Fragment 与 Compute Shader 怎样读写数据？ |
+| 13 | [GPU 执行架构](./gpu-architecture.md) | SIMT、warp/wave、占用率和显存层次如何影响执行？ |
+| 14 | [Vulkan 基础：显式表达 GPU 工作](./vulkan-basics.md) | Vulkan 如何组织资源、pipeline、命令和提交？ |
+| 15 | [GPU 内存与同步](./gpu-memory-and-sync.md) | 可用性、可见性、barrier、semaphore、fence 有何区别？ |
+
+这里的编号承接前两组。先学习图形语义，再学习 GPU 怎样执行这些工作，最后进入 Vulkan 的资源与同步模型。
+
+完成本组后，继续阅读编译器板块的第 16 篇 [Shader Recompiler：从 GPU ISA 到 SPIR-V](../compilers/shader-recompilation.md)。它把本组的 Shader、GPU ISA、纹理资源和 Vulkan pipeline，与前面学习的 frontend、IR、lowering 和 backend 串成一条完整翻译链。
 
 ## 两条阅读线
 

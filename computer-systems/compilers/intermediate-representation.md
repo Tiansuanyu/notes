@@ -131,7 +131,7 @@ IR 让前端先写出“正确但未必最快”的语义，再由优化器和�
 
 Shader recompiler 同样需要 frontend → IR → optimization → backend，因为 guest shader ISA、host SPIR-V 和 GPU 驱动之间也存在语义差异。但 shader IR 还要表达执行阶段、纹理、采样、资源绑定和 SIMT 行为。CPU IR 的概念可以迁移，具体 opcode 与合法变换不能直接照搬。
 
-下一篇 [从 Clang 到链接器](./compilation-pipeline.md) 将沿 Hookshot 的 lifted C 继续向下，解释 C 怎样经过 Clang/LLVM、对象文件和 LLD 变成最终程序；也会区分这条 AOT 工具链与 Dynarmic 自己的运行时代码生成。
+下一篇 [从 Clang 到链接器](./compilation-pipeline.md) 将沿 Hookshot 的 lifted C 继续向下，解释 C 怎样经过 Clang/LLVM、对象文件和 LLD 变成最终程序；也会区分这条 AOT 工具链与 Dynarmic 自己的运行时代码生成。完成图形与 GPU 基础后，可继续阅读 [Shader Recompiler：从 GPU ISA 到 SPIR-V](./shader-recompilation.md)，观察 stage、texture 和 descriptor 语义怎样进入另一种 IR。
 
 ## 源码阅读入口
 

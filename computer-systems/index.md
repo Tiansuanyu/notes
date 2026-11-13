@@ -45,7 +45,7 @@ flowchart TB
 
 | 仓库 | 核对版本 | 在本板块中的作用 |
 | --- | --- | --- |
-| [Lichii](https://github.com/zortos293/Lichii/tree/6cd99d2e1523706c491031740b167201ca8f0acf) | `nx2` / `6cd99d2` | 运行时模拟器：CPU JIT、Horizon HLE、GPU 模拟与 shader 重编译 |
-| [Hookshot](https://github.com/NotRexed/Hookshot/tree/ba005ca4fa179ccd2140f06f9308d0ff63894ff6) | `main` / `ba005ca` | 静态重编译：AArch64 提升到 C、host runtime、NVN2 到 Vulkan |
+| [Lichii](https://github.com/zortos293/Lichii/tree/9441129819edfee62e65ff6030749e80f420ba1e) | `nx2` / `9441129` | 运行时模拟器：CPU JIT、Horizon HLE、GPU 模拟与 shader 重编译 |
+| [Hookshot](https://github.com/NotRexed/Hookshot/tree/e9975d6c245275aaf89a34e8d17a6bbe8badab46) | `main` / `e9975d6` | 静态重编译：AArch64 提升到 C、host runtime、NVN2 到 Vulkan |
 
 这些项目的实验日志、兼容性结论和未完成路径都只对对应 commit 成立，不当作永久的通用规律。

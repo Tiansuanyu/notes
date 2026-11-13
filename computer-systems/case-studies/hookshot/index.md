@@ -6,7 +6,7 @@ order: 20
 
 # Hookshot 源码阅读
 
-本页以公开仓库 `main` 分支的 commit [`d7a7306`](https://github.com/NotRexed/Hookshot/tree/d7a730625f42cc2385b452aa4dfcb0f917b62bcd) 为基线。仓库将特定 AArch64 程序静态提升并编译为 Windows/Linux 原生程序，同时用 host runtime 和 Vulkan 路径承接所需系统与图形语义。它不是通用模拟器，也不是拥有原始源码的常规跨平台移植。
+本页以公开仓库 `main` 分支的 commit [`ba005ca`](https://github.com/NotRexed/Hookshot/tree/ba005ca4fa179ccd2140f06f9308d0ff63894ff6) 为基线。仓库将特定 AArch64 程序静态提升并编译为 Windows/Linux 原生程序，同时用 host runtime 和 Vulkan 路径承接所需系统与图形语义。它不是通用模拟器，也不是拥有原始源码的常规跨平台移植。
 
 ```mermaid
 flowchart TB
@@ -33,9 +33,9 @@ flowchart TB
 
 ## 怎样读这条链
 
-先读公开的 [`docs/design.md`](https://github.com/NotRexed/Hookshot/blob/d7a730625f42cc2385b452aa4dfcb0f917b62bcd/docs/design.md)，确认构建期和运行期各自负责什么。然后沿 `nso2.py` / `image.py` 的模块输入走到 `lift.py`，观察 guest 寄存器、内存与控制流怎样被表达。host runtime 与 GPU 路径要分别追踪，最后再在生成的 host 可执行程序处汇合。
+先读公开的 [`docs/design.md`](https://github.com/NotRexed/Hookshot/blob/ba005ca4fa179ccd2140f06f9308d0ff63894ff6/docs/design.md)，确认构建期和运行期各自负责什么。然后沿 `nso2.py` / `image.py` 的模块输入走到 `lift.py`，观察 guest 寄存器、内存与控制流怎样被表达。host runtime 与 GPU 路径要分别追踪，最后再在生成的 host 可执行程序处汇合。
 
-GPU 页面还会对照 [`BAKE.md`](https://github.com/NotRexed/Hookshot/blob/d7a730625f42cc2385b452aa4dfcb0f917b62bcd/BAKE.md) 和 [`gpu/vk/VULKAN.md`](https://github.com/NotRexed/Hookshot/blob/d7a730625f42cc2385b452aa4dfcb0f917b62bcd/gpu/vk/VULKAN.md)。其中带日期的状态记录只描述当时实现，不能当作 Vulkan 或 shader 翻译的通用限制。
+GPU 页面还会对照 [`BAKE.md`](https://github.com/NotRexed/Hookshot/blob/ba005ca4fa179ccd2140f06f9308d0ff63894ff6/BAKE.md) 和 [`gpu/vk/VULKAN.md`](https://github.com/NotRexed/Hookshot/blob/ba005ca4fa179ccd2140f06f9308d0ff63894ff6/gpu/vk/VULKAN.md)。其中带日期的状态记录只描述当时实现，不能当作 Vulkan 或 shader 翻译的通用限制。
 
 ## 记录规则
 

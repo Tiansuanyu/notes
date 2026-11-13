@@ -22,15 +22,16 @@ flowchart TB
     SIR --> SPV[SPIR-V / Host Shader]
 ```
 
-## 计划内容
+## 阅读顺序
 
-| 稳定文件名 | 要建立的认识 | 对应案例 |
+| 顺序 | 笔记 | 要建立的认识 |
 | --- | --- | --- |
-| `compilation-pipeline.md` | 前端、优化器、后端、汇编器和链接器如何分工 | 先建立普通编译基线 |
-| `intermediate-representation.md` | IR 为什么需要多层，SSA、控制流图和数据流分析做什么 | Dynarmic IR、提升到 C、shader IR |
-| `jit-and-aot.md` | 翻译时机、缓存、启动成本、优化空间和代码失效如何权衡 | Lichii 的运行时 JIT 与 Hookshot 的构建期 AOT |
-| `binary-lifting.md` | 怎样从机器码恢复指令语义、基本块、函数和重定位 | Hookshot 的 AArch64 到 C 路径 |
-| `shader-recompilation.md` | Shader 指令与资源语义如何映射到 host 图形 API | 两个案例的 shader 翻译 |
+| 1 | [JIT 与 AOT：翻译时机的选择](./jit-and-aot.md) | 为什么 Lichii 在运行时翻译，而 Hookshot 在构建时翻译 |
+| 2 | [从 ARM64 机器码恢复程序：Binary Lifting](./binary-lifting.md) | 怎样恢复指令语义、控制流、函数、跳转表与运行时状态 |
+| 3 | [中间表示为何是翻译系统的核心](./intermediate-representation.md) | IR 如何隔离 guest 前端、优化与 host 后端 |
+| 4 | [从 Clang 到链接器：编译流水线](./compilation-pipeline.md) | Clang、LLVM、汇编器、对象文件和链接器怎样协作 |
+
+Shader 重编译仍作为后续专题；先建立这组 CPU 与程序翻译基础，再进入图形侧的指令、资源和管线语义。
 
 ## 三种容易混淆的路径
 

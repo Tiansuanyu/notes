@@ -6,7 +6,7 @@ order: 10
 
 # Lichii 源码阅读
 
-本页以公开仓库 `nx2` 分支的 commit [`babdb6b`](https://github.com/zortos293/Lichii/tree/babdb6bb752af8a35e94b305613d6be7ba7e6217) 为基线。Lichii 是由既有模拟器代码发展而来的实验性 Switch / Switch 2 模拟器，适合观察一个完整运行时怎样同时连接 CPU、HLE 和 GPU；具体兼容状态与工程日志只对该版本成立。
+本页以公开仓库 `nx2` 分支的 commit [`6cd99d2`](https://github.com/zortos293/Lichii/tree/6cd99d2e1523706c491031740b167201ca8f0acf) 为基线。Lichii 是由既有模拟器代码发展而来的实验性 Switch / Switch 2 模拟器，适合观察一个完整运行时怎样同时连接 CPU、HLE 和 GPU；具体兼容状态与工程日志只对该版本成立。
 
 ```mermaid
 flowchart TB
@@ -32,7 +32,7 @@ flowchart TB
 
 ## 第一轮阅读顺序
 
-先用 [`docs/dynarmic/Design.md`](https://github.com/zortos293/Lichii/blob/babdb6bb752af8a35e94b305613d6be7ba7e6217/docs/dynarmic/Design.md) 建立 JIT 的块、IR 和后端概念，再追踪 CPU backend 如何进入它。随后从 SVC 进入 kernel/service，而不是从服务目录随机浏览。GPU 部分先读 shader recompiler 的目录分层，再把 [`NX2_GPU_THREAD_SPLIT.md`](https://github.com/zortos293/Lichii/blob/babdb6bb752af8a35e94b305613d6be7ba7e6217/NX2_GPU_THREAD_SPLIT.md) 与相同 commit 的实现互相核对。
+先用 [`docs/dynarmic/Design.md`](https://github.com/zortos293/Lichii/blob/6cd99d2e1523706c491031740b167201ca8f0acf/docs/dynarmic/Design.md) 建立 JIT 的块、IR 和后端概念，再用当前 [`arm_dynarmic_64.cpp`](https://github.com/zortos293/Lichii/blob/6cd99d2e1523706c491031740b167201ca8f0acf/src/core/arm/dynarmic/arm_dynarmic_64.cpp) 和 A64 frontend 校正旧文档。随后从 SVC 进入 kernel/service，而不是从服务目录随机浏览。GPU 部分先读 shader recompiler 的目录分层，再把 [`NX2_GPU_THREAD_SPLIT.md`](https://github.com/zortos293/Lichii/blob/6cd99d2e1523706c491031740b167201ca8f0acf/NX2_GPU_THREAD_SPLIT.md) 与相同 commit 的实现互相核对。
 
 ## 记录规则
 

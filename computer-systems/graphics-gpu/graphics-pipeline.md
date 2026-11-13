@@ -16,9 +16,10 @@ order: 10
 | Mesh | 顶点与面之间的连接关系 | 真实材质和纹理内容 |
 | 材质 | 表面如何响应光照及使用哪些纹理 | 几何形状 |
 | 纹理 | 按坐标查询的二维/三维数据 | 将它贴到哪块表面的 UV 关系 |
+| 3D Gaussian | 中心、协方差、opacity 与方向外观 | 显式表面拓扑、可通行性 |
 | 相机 | 观察位置、方向、投影和视口 | 场景本身的尺度可靠性 |
 
-点云可以直接按 point primitive 绘制，但采样间可能露出空洞，也没有天然遮挡表面。Mesh 用三角形近似连续表面，适合光栅化、碰撞和几何查询；纹理再通过 UV 为表面提供颜色、法线或材质参数。
+点云可以直接按 point primitive 绘制，但采样间可能露出空洞，也没有天然遮挡表面。Mesh 用三角形近似连续表面，适合光栅化、碰撞和几何查询；纹理再通过 UV 为表面提供颜色、法线或材质参数。3DGS 不先建立三角面，而把各向异性 Gaussian 投影为屏幕椭圆并按透明度合成，详见[三维高斯场景表示](../../slam/3dgs/gaussian-representation.md)。
 
 SLAM 中这些表示的观测含义见[地图到底存了什么](../../slam/fundamentals/地图到底存了什么.md#_8-点云、surfel-与-mesh)，点云坐标对齐见[点云配准](../../slam/fundamentals/点云配准.md)。渲染结果看起来连续，不代表原地图已经具有可靠拓扑、自由空间或定位观测关系。
 
@@ -109,7 +110,7 @@ flowchart LR
 
 每一步都有独立误差：点云可能存在漂移，表面重建会填洞或平滑，颜色投影依赖相机位姿和曝光，UV atlas 还会引入 seam。漂亮纹理不能证明底层几何准确；同样，准确点云也不会自动变成没有孔洞的 Mesh。
 
-下一篇 [光栅化](./rasterization.md) 具体解释三角形怎样产生 fragments；[纹理与采样](./textures-and-sampling.md) 再说明 UV 如何从图像资源取得表面数据。
+下一篇 [光栅化](./rasterization.md) 具体解释三角形怎样产生 fragments；[纹理与采样](./textures-and-sampling.md) 再说明 UV 如何从图像资源取得表面数据。Gaussian 路线则从[Gaussian Splatting 渲染](../../slam/3dgs/gaussian-splatting-rendering.md)进入另一种覆盖与合成过程。
 
 ## 参考入口
 

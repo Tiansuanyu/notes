@@ -82,7 +82,11 @@ C_{out}=\alpha_s C_s+(1-\alpha_s)C_d.
 
 MSAA 主要改善多边形边缘，不会自动消除纹理缩小时的闪烁；后者依赖 mipmap、anisotropic filtering 或时间域策略。
 
-## 7. 兼容层为何容易错
+## 7. Gaussian Splatting 不是三角形覆盖
+
+3DGS 将三维 covariance 投影为二维 ellipse，用 Mahalanobis 距离计算每个像素的 alpha，再按深度近似排序并前到后合成。它同样需要求屏幕 bounding region 和局部候选，但没有三角形 edge function、重心插值和普通“最近深度胜出”。完整算法见[Gaussian Splatting 渲染](../../slam/3dgs/gaussian-splatting-rendering.md)，CUDA 的 tile/排序实现见[Gaussian Rasterizer 的 GPU 实现](./gaussian-rasterizer.md)。
+
+## 8. 兼容层为何容易错
 
 guest 与 host API 即使都有“三角形 + fragment shader”，仍要逐项映射：
 

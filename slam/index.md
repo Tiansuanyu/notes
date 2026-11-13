@@ -5,7 +5,7 @@ order: 0
 
 # SLAM Overview
 
-这里按“感知对应 → 几何 → 地图与估计 → 数据评估 → 离线定位 → 学习式几何 → 在线系统”整理视觉定位与 SLAM 学习笔记。
+这里按“感知对应 → 几何 → 地图与估计 → 数据评估 → 离线定位 → 学习式几何与 3DGS → 在线系统”整理视觉定位与 SLAM 学习笔记。
 
 若需要先补足公式推导，可从 [Mathematics](../mathematics/) 进入李群、非线性最小二乘、滤波、IMU 与 LIO 数学主线；本板块继续负责算法任务、地图语义、工程边界与评估方法。
 
@@ -44,13 +44,21 @@ order: 0
 20. [LingBot-Map 与流式几何记忆](./learning-based/LingBot-Map与流式几何记忆)
 21. [从几何地图到语义地图](./learning-based/从几何地图到语义地图)
 
+### 3D Gaussian Splatting
+
+22. [3D Gaussian Splatting 总览](./3dgs/)
+23. [三维高斯场景表示](./3dgs/gaussian-representation)
+24. [Gaussian Splatting 渲染](./3dgs/gaussian-splatting-rendering)
+25. [可微渲染、优化与增密](./3dgs/differentiable-rendering)
+26. [Gaussian Grouping：从重建到实例分组](./3dgs/gaussian-grouping)
+
 ### RTAB-Map
 
-22. [地图与记忆管理](./rtabmap/地图与记忆管理)
-23. [视觉前端、跟踪与深度来源](./rtabmap/视觉前端、跟踪与深度来源)
-24. [建图过程与地图更新](./rtabmap/建图过程与地图更新)
-25. [里程计与外部 VIO](./rtabmap/里程计与外部VIO)
-26. [OpenVINS：状态传播与视觉更新](./rtabmap/OpenVINS状态传播与视觉更新)
-27. [定位与重定位流程](./rtabmap/定位与重定位流程)
-28. [危险误接受防护与恢复](./rtabmap/危险误接受防护与恢复)
-29. [RTAB-Map 与 HLoc 的定位链对比](./rtabmap/RTAB-Map与HLoc的定位链对比)
+27. [地图与记忆管理](./rtabmap/地图与记忆管理)
+28. [视觉前端、跟踪与深度来源](./rtabmap/视觉前端、跟踪与深度来源)
+29. [建图过程与地图更新](./rtabmap/建图过程与地图更新)
+30. [里程计与外部 VIO](./rtabmap/里程计与外部VIO)
+31. [OpenVINS：状态传播与视觉更新](./rtabmap/OpenVINS状态传播与视觉更新)
+32. [定位与重定位流程](./rtabmap/定位与重定位流程)
+33. [危险误接受防护与恢复](./rtabmap/危险误接受防护与恢复)
+34. [RTAB-Map 与 HLoc 的定位链对比](./rtabmap/RTAB-Map与HLoc的定位链对比)

@@ -14,6 +14,8 @@ order: 0
 - [张量、算子与神经网络计算](./张量、算子与神经网络计算.md)：从图像张量、布局和计算图建立计算直觉。
 - [Transformer 与 Vision Transformer（ViT）](./Transformer与VisionTransformer（ViT）.md)：沿 patch、嵌入、位置编码和 Encoder 理解 CLS/patch 特征。
 - [Attention、KV Cache 与高效计算](./Attention、KVCache与高效计算.md)：分清注意力语义、缓存复用和内核优化。
+- [可微 Gaussian 渲染](../slam/3dgs/differentiable-rendering.md)：用一个非神经网络主体的自定义算子案例理解计算图、保存中间量与反向传播。
+- [Gaussian Kernel 通道融合](../computer-systems/graphics-gpu/gpu-kernel-optimization.md)：用真实 CUDA 模板案例理解融合、occupancy 与端到端测量的边界。
 
 ## 训练与适配
 

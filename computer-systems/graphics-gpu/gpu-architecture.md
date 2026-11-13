@@ -42,6 +42,8 @@ Occupancy 受到以下资源共同限制：
 
 高 occupancy 不是最终目标。一个算法可能以更多寄存器减少重复访存，即使 occupancy 下降，总时间仍更短。必须结合瓶颈和实际 profile 判断。
 
+一个具体案例是 3D Gaussian rasterizer 将 3 通道 RGB 与 16 通道 identity 合为 Native19 kernel：forward occupancy 因寄存器增加而下降，但少一次候选遍历后，固定实验中总时间仍更短。数据、协议和适用边界见[GPU Kernel 优化：通道融合、占用率与测量](./gpu-kernel-optimization.md)。
+
 ## 4. 内存层次
 
 | 层次 | 常见特点 | 使用注意 |

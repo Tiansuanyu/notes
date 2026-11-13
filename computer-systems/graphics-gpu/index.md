@@ -32,10 +32,12 @@ flowchart TB
 | 13 | [GPU 执行架构](./gpu-architecture.md) | SIMT、warp/wave、占用率和显存层次如何影响执行？ |
 | 14 | [Vulkan 基础：显式表达 GPU 工作](./vulkan-basics.md) | Vulkan 如何组织资源、pipeline、命令和提交？ |
 | 15 | [GPU 内存与同步](./gpu-memory-and-sync.md) | 可用性、可见性、barrier、semaphore、fence 有何区别？ |
+| 16 | [Gaussian Rasterizer 的 GPU 实现](./gaussian-rasterizer.md) | 三维高斯怎样投影、分块、排序并合成 RGB/特征？ |
+| 17 | [GPU Kernel 优化：通道融合、占用率与测量](./gpu-kernel-optimization.md) | Native19 为什么可能更快，又为何必须实测？ |
 
 这里的编号承接前两组。先学习图形语义，再学习 GPU 怎样执行这些工作，最后进入 Vulkan 的资源与同步模型。
 
-完成本组后，继续阅读编译器板块的第 16 篇 [Shader Recompiler：从 GPU ISA 到 SPIR-V](../compilers/shader-recompilation.md)。它把本组的 Shader、GPU ISA、纹理资源和 Vulkan pipeline，与前面学习的 frontend、IR、lowering 和 backend 串成一条完整翻译链。
+完成基础七篇后，可以沿两条案例线继续：3D 视觉方向阅读 Gaussian rasterizer 与 kernel 优化；二进制翻译方向阅读[Shader Recompiler：从 GPU ISA 到 SPIR-V](../compilers/shader-recompilation.md)。后者把 Shader、GPU ISA、纹理资源和 Vulkan pipeline，与 frontend、IR、lowering 和 backend 串成一条完整翻译链。
 
 ## 两条阅读线
 

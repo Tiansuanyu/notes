@@ -40,10 +40,10 @@ flowchart LR
 
 Compute dispatch 定义若干 workgroup，每个 workgroup 又包含一维、二维或三维 local invocations：
 
-\[
+$$
 \text{global id}
 =\text{workgroup id}\times\text{local size}+\text{local id}.
-\]
+$$
 
 同一 workgroup 内可使用 shared/workgroup memory，并通过 barrier 协作。Barrier 只覆盖规范规定的执行与内存 scope，不能自动同步另一个 dispatch、另一个 queue 或 CPU。
 

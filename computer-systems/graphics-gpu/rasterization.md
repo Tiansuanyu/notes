@@ -38,18 +38,18 @@ flowchart TB
 
 覆盖点可表示为三角形顶点的重心组合：
 
-\[
+$$
 p=\lambda_0v_0+\lambda_1v_1+\lambda_2v_2,
 \qquad \lambda_0+\lambda_1+\lambda_2=1.
-\]
+$$
 
 颜色、法向和 UV 等 varying 会在顶点输出之间插值。透视投影下直接用屏幕空间 $\lambda_i$ 线性插值纹理坐标会产生形变，需使用透视正确插值：
 
-\[
+$$
 a(p)=
 \frac{\sum_i \lambda_i a_i/w_i}
      {\sum_i \lambda_i/w_i}.
-\]
+$$
 
 也可显式选择 flat 或 no-perspective 等插值模式。顶点 shader 的输出声明与 fragment shader 的输入声明必须在位置、类型和插值规则上兼容。
 
@@ -70,9 +70,9 @@ a(p)=
 
 普通 alpha blending 常写成：
 
-\[
+$$
 C_{out}=\alpha_s C_s+(1-\alpha_s)C_d.
-\]
+$$
 
 它依赖绘制顺序，且预乘 alpha 的 blend factor 不同。开启 blending 不会自动解决透明物体排序，也不是物理正确的体渲染。
 

@@ -14,10 +14,10 @@ guest 程序看到的是自己的虚拟地址，host 进程则有另一套虚拟
 
 普通操作系统的简化路径是：
 
-\[
+$$
 \text{VA} = (\text{VPN},\ \text{offset}),\qquad
 \text{PA} = \text{page\_table}(\text{VPN}) + \text{offset}.
-\]
+$$
 
 页表项不仅给出页框，还包含 read/write/execute、用户态可见性和状态位；TLB 缓存近期翻译。访问未映射页或违反权限时，CPU 产生 fault，而不是“读到一个随机值”。
 
@@ -66,9 +66,9 @@ page table 更新还可能要求 JIT 或地址翻译缓存失效。若 guest 修
 
 Hookshot 的静态提升运行时使用一个固定 guest 地址窗口，并通过 `A64_PTR` / `GP` 把 guest 地址换成 host 指针。概念上可以写成：
 
-\[
+$$
 p_{host} = B_{guest\ window} + a_{guest}.
-\]
+$$
 
 但这个公式只对该运行时预留的窗口成立，不是虚拟内存的一般规律。当前 `hos.h` 还提供 `hos_guest_range()`：先检查起始地址和长度是否完整落在窗口中，再允许 host handler 解引用，防止整数回绕把 guest 输入变成任意 host 指针。
 

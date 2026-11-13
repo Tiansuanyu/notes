@@ -1,10 +1,12 @@
 ---
 title: JIT 与 AOT：翻译时机的选择
 description: 对照 Lichii 与 Hookshot，理解动态二进制翻译、静态重编译、代码缓存与失效。
-order: 10
+order: 60
 ---
 
 # JIT 与 AOT：翻译时机的选择
+
+JIT/AOT 改变的是**何时**完成 lowering、优化与目标代码生成，不会取消这些阶段。建议先建立[传统编译器链](./)与[目标代码生成](./backend/code-generation.md)，再比较运行时信息、编译延迟和代码缓存。
 
 Lichii 和 Hookshot 都要让 ARM64 guest 程序在另一套 host 环境中运行，但选择了不同的时间边界：Lichii 在程序运行时按需生成 host 代码，Hookshot 在构建阶段把已知程序提升为 C，再编译、链接成 host 可执行程序。
 

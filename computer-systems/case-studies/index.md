@@ -1,12 +1,14 @@
 ---
 title: 源码案例
-description: 用 Lichii 与 Hookshot 对照理解模拟器、静态重编译、HLE 和图形翻译。
+description: 用 SPL、Lichii 与 Hookshot 连接传统编译、模拟器、静态重编译、HLE 和图形翻译。
 order: 60
 ---
 
 # 源码案例
 
 案例笔记负责回答“一个公开工程怎样组合通用原理”，不会替代 [基础原理](../foundations/)、[操作系统](../operating-systems/)、[编译器](../compilers/) 和 [图形与 GPU](../graphics-gpu/) 中的完整解释。
+
+先读 [CS323 SPL 编译器](./cs323-spl-compiler/) 建立源码、AST、TAC 与 MIPS 的传统编译闭环，再比较输入已经是机器码时的 Lichii 与 Hookshot。SPL 案例使用仓库自带 factorial artifact，明确区分真实输出和手工压缩示意。
 
 ## 为什么并排阅读
 

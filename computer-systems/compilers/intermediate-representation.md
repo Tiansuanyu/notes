@@ -1,12 +1,14 @@
 ---
 title: 中间表示为何是翻译系统的核心
 description: 理解 IR、SSA、基本块、终结指令，以及 Dynarmic IR、lifted C 和 shader IR 的不同责任。
-order: 30
+order: 40
 ---
 
 # 中间表示为何是翻译系统的核心
 
 如果每种 guest ISA 都直接对应每种 host ISA，支持 (N) 个前端和 (M) 个后端可能需要维护 (N\times M) 套翻译逻辑。中间表示（Intermediate Representation，IR）把问题拆成“guest 语义 → IR”和“IR → host 语义”，让解码、优化与代码生成拥有共同边界。
+
+若还没有建立传统编译器主线，先读[中间代码生成](./middle-end/intermediate-code-generation.md)、[控制流图与数据流分析](./middle-end/control-flow-and-data-flow.md)和[经典编译优化](./middle-end/compiler-optimizations.md)。TAC、LLVM IR、Dynarmic IR 与 shader IR 都叫 IR，但抽象层次、类型系统和可观察语义不同。
 
 IR 不是越接近高级语言越好，也不是某种固定格式。它应当显式表达当前系统最关心的语义，同时隐藏后续阶段不需要反复处理的编码细节。
 

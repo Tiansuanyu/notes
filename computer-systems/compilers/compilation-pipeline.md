@@ -1,12 +1,14 @@
 ---
 title: 从 Clang 到链接器：编译流水线
 description: 理解 Clang、LLVM、汇编器、对象文件与 LLD，并对照 Hookshot 和 Lichii 的双层翻译链。
-order: 40
+order: 50
 ---
 
 # 从 Clang 到链接器：编译流水线
 
 “用 Clang 编译”经常把多个阶段压缩成一句话。实际上，Clang driver 会组织预处理、语言前端、LLVM 优化与代码生成、汇编和链接；每个阶段拥有不同输入、输出与错误边界。
+
+传统的 scanner、parser、semantic analysis、TAC 与 code generation 已分别放在[编译器前端](./frontend/)、[中端](./middle-end/)和[后端](./backend/)；本文只负责把这些概念连接到 Clang/LLVM、对象文件和链接器，不重复完整推导。
 
 理解这些阶段后，才能准确回答 Hookshot 中的两个问题：ARM64 指令在何处变成 C，C 又在何处变成 host 机器码？也能避免误以为 Lichii 的 Dynarmic 在运行时调用 LLVM。
 

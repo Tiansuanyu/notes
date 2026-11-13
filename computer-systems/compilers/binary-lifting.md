@@ -1,10 +1,12 @@
 ---
 title: 从 ARM64 机器码恢复程序：Binary Lifting
 description: 以 Hookshot 为例理解映像重建、函数发现、控制流恢复、指令语义和运行时兜底。
-order: 20
+order: 70
 ---
 
 # 从 ARM64 机器码恢复程序：Binary Lifting
+
+普通前端从源码 token 和 CFG 文法获得结构；binary lifting 的输入已经丢失了变量名、类型与 AST。先读[语法与语义前端](./frontend/)和[中间代码生成](./middle-end/intermediate-code-generation.md)，有助于理解 lifter 必须重新建立哪些信息、哪些信息已经无法可靠恢复。
 
 Binary lifting 的目标不是还原作者当年的 C++ 源码，而是把机器码转换成一种更容易分析、变换和重新生成的表示，同时保持程序可观察行为。
 

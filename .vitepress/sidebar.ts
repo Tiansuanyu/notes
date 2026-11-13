@@ -38,6 +38,13 @@ interface PageInfo {
   text: string
 }
 
+interface SortableSidebarItem {
+  fileName: string
+  isIndex: boolean
+  item: DefaultTheme.SidebarItem
+  order?: number
+}
+
 export interface ContentNavigation {
   nav: DefaultTheme.NavItem[]
   sidebar: DefaultTheme.SidebarMulti
@@ -135,7 +142,7 @@ function buildItems(
   includeIndex = true
 ): DefaultTheme.SidebarItem[] {
   const entries = readdirSync(directory, { withFileTypes: true })
-  const pages = entries
+  const pages: SortableSidebarItem[] = entries
     .filter((entry) => entry.isFile() && extname(entry.name).toLowerCase() === '.md')
     .filter((entry) => includeIndex || entry.name.toLowerCase() !== 'index.md')
     .map((entry) => {
@@ -145,9 +152,14 @@ function buildItems(
     })
     .filter((page) => !page.hidden)
     .sort(comparePages)
-    .map(({ text, link }) => ({ text, link }))
+    .map((page) => ({
+      fileName: page.fileName,
+      isIndex: page.isIndex,
+      item: { text: page.text, link: page.link },
+      order: page.order
+    }))
 
-  const groups = entries
+  const groups: SortableSidebarItem[] = entries
     .filter((entry) => entry.isDirectory() && isContentDirectory(entry.name))
     // A directory containing only compatibility redirects should keep its
     // routes, but should not reappear as an empty sidebar group.
@@ -172,18 +184,32 @@ function buildItems(
       return a.entry.name.localeCompare(b.entry.name, 'en')
     })
     .map(({ childDirectory, childRoute, entry, indexPage }) => {
-
       return {
-        text: indexPage?.text ?? humanize(entry.name),
-        ...(indexPage ? { link: indexPage.link } : {}),
-        collapsed: false,
-        // The group's title links to index.md, so do not duplicate that route
-        // as a child item. All deeper directories are handled recursively.
-        items: buildItems(childDirectory, childRoute, false)
+        fileName: relative(siteRoot, childDirectory).replaceAll('\\', '/'),
+        isIndex: false,
+        order: indexPage?.order,
+        item: {
+          text: indexPage?.text ?? humanize(entry.name),
+          ...(indexPage ? { link: indexPage.link } : {}),
+          collapsed: false,
+          // The group's title links to index.md, so do not duplicate that route
+          // as a child item. All deeper directories are handled recursively.
+          items: buildItems(childDirectory, childRoute, false)
+        }
       }
     })
 
   return [...pages, ...groups]
+    .sort((a, b) => {
+      if (a.isIndex !== b.isIndex) return a.isIndex ? -1 : 1
+
+      const aOrder = a.order ?? Number.POSITIVE_INFINITY
+      const bOrder = b.order ?? Number.POSITIVE_INFINITY
+
+      if (aOrder !== bOrder) return aOrder - bOrder
+      return a.fileName.localeCompare(b.fileName, 'en')
+    })
+    .map(({ item }) => item)
 }
 
 export function createContentNavigation(): ContentNavigation {

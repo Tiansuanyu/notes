@@ -1,10 +1,12 @@
 ---
 title: Shader Recompiler：从 GPU ISA 到 SPIR-V
 description: 理解 GPU ISA、Ampere 到 Maxwell 的语义 lowering、Shader IR、SPIR-V 后端与 Vulkan 驱动编译。
-order: 50
+order: 80
 ---
 
 # Shader Recompiler：从 GPU ISA 到 SPIR-V
+
+这条链仍可用 frontend → IR → optimization → backend 理解。传统基础见[编译器总览](./)、[数据流与优化](./middle-end/control-flow-and-data-flow.md)和[代码生成](./backend/code-generation.md)；shader 的执行阶段、资源和 SIMT 语义则必须由专用 IR 继续携带。
 
 普通图形应用常从 GLSL、HLSL 等源语言开始；兼容层或模拟器面对的却可能是已经为 guest GPU 编译好的机器指令。Shader Recompiler 的任务不是恢复一份可读的原始源码，而是在保留执行阶段、控制流、资源访问与并行语义的前提下，把 guest GPU 程序转换成 host 图形 API 能接受的表示。
 

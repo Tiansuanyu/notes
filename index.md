@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "Tiansuanyu's Notes"
-  text: Computer Systems · SLAM · Robotics Systems · AI Infra
+  text: Mathematics · Computer Systems · SLAM · Robotics Systems · AI Infra
   tagline: Personal technical notes and learning records.
   actions:
     - theme: brand
@@ -14,6 +14,9 @@ hero:
       link: https://github.com/Tiansuanyu/notes
 
 features:
+  - title: Mathematics
+    details: 面向 SLAM、机器人估计、三维视觉与深度学习的应用数学和算法基础。
+    link: /mathematics/
   - title: Computer Systems
     details: 从程序、ISA、ABI 与操作系统，走到编译器、GPU、逆向工程与源码案例。
     link: /computer-systems/

@@ -7,6 +7,8 @@ order: 0
 
 这里记录感知、定位、规划与控制怎样通过明确契约组成可恢复、可观测的机器人系统；算法原理见 [SLAM](../slam/)，模型计算与导出见 [AI Infra](../ai-infra/)。
 
+坐标变换、滤波、IMU 与里程计残差的推导入口见 [Mathematics](../mathematics/)；机器人闭环的模型与算法见[机器人建模与控制](../mathematics/robot-modeling-control/)，多传感器运行时的时间边界见[同步、延迟与多速率系统](../mathematics/signals-and-systems/timing-delay-and-multirate-systems.md)。本板块关注它们跨进程、跨设备运行时的接口、调度和故障边界。
+
 ## 系统基础
 
 - [机器人系统分层与数据流](./机器人系统分层与数据流.md)：从传感器到控制理解职责、频率与反馈。

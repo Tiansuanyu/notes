@@ -7,7 +7,7 @@ const { nav, sidebar } = createContentNavigation()
 export default defineConfig({
   lang: 'zh-CN',
   title: "Tiansuanyu's Notes",
-  description: 'Computer Systems、Robotics、SLAM 与 AI Infra 技术笔记',
+  description: 'Mathematics、Computer Systems、Robotics、SLAM 与 AI Infra 技术笔记',
   base: '/notes/',
   cleanUrls: true,
   lastUpdated: true,

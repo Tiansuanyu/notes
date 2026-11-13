@@ -8,6 +8,8 @@ order: 26
 
 OpenVINS 最值得学习的不是某个参数，而是它怎样把“高频 IMU 传播”和“较低频视觉校正”放进一个带交叉协方差的滑窗 EKF。相机特征并非全部变成长期地图点：普通 MSCKF 特征只在形成多帧约束时临时三角化，随后通过零空间投影消去；只有被选为 SLAM feature 的少量点才作为显式变量留在状态中。
 
+本文沿公开实现解释系统执行链。需要先理解滤波方程时，可依次阅读[ESKF](../../mathematics/probabilistic-estimation/error-state-kalman-filter.md)、[IMU 状态传播](../../mathematics/inertial-odometry/imu-measurement-and-propagation.md)与[Fisher 信息及可观测性](../../mathematics/probabilistic-estimation/fisher-information-and-observability.md)；传感器噪声参数的识别边界见[IMU 噪声、PSD 与 Allan 方差](../../mathematics/signals-and-systems/imu-noise-psd-and-allan-variance.md)。
+
 ## 1. 先明确任务与输出边界
 
 OpenVINS 的基础任务是视觉惯性里程计（VIO）：根据按时间到达的 IMU 和相机观测，递推估计局部运动状态。它可以支持单目、同步双目或多相机输入，也可以选择 KLT 或描述子跟踪，但视觉前端的输出最终都是带时间和相机身份的稀疏特征轨迹。

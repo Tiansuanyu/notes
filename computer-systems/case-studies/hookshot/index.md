@@ -44,4 +44,4 @@ GPU 页面还会对照 [`BAKE.md`](https://github.com/NotRexed/Hookshot/blob/e99
 - host runtime 的某个函数存在，不足以证明所有边界条件都已实现；要继续检查调用、返回值和错误路径。
 - 公开设计文档、当前源码和实验观察分别标注，不把推断写成仓库作者已声明的事实。
 
-通用知识回到 [编译器与程序翻译](../../compilers/)、[操作系统](../../operating-systems/) 和 [图形与 GPU](../../graphics-gpu/) 维护。
+通用知识回到 [编译器与程序翻译](../../compilers/)、[操作系统](../../operating-systems/) 和 [图形与 GPU](../../graphics-gpu/) 维护。静态重编译中的模块布局、重定位、函数发现和间接目标也是逆向证据链的一部分；它们的覆盖率与运行成功不能单独证明全部路径等价或边界安全，见 [逆向工程的方法与证据](../../security-re/reverse-engineering.md)。

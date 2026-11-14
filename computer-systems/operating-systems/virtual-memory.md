@@ -114,6 +114,10 @@ Hookshot 当前 `QueryMemory` 只描述它显式识别的一部分区域，对�
 
 接下来读 [同步语义](./synchronization.md)：映射正确只解决“读哪一块内存”，并发程序还要求原子操作、等待和唤醒对同一状态达成一致。
 
+## 8. 地址有效不等于访问被授权
+
+范围落在某个 mapping 内，只证明地址可解释；还要检查 memory state、读写权限、进程归属、对象生命周期和请求主体。兼容层把 guest 数值转换为 host pointer 时尤其不能用一次 cast 替代这条链。更系统的缺陷分类见 [内存安全](../security-re/memory-safety.md)，资产和攻击者能力的建模见 [威胁模型与信任边界](../security-re/threat-models-and-trust-boundaries.md)。
+
 ## 源码阅读入口
 
 - Lichii [`k_page_table_base.cpp`](https://github.com/zortos293/Lichii/blob/9441129819edfee62e65ff6030749e80f420ba1e/src/core/hle/kernel/k_page_table_base.cpp)：地址空间布局、memory state、map/unmap、heap 与 query。

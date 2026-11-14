@@ -144,6 +144,10 @@ readelf -l -d demo
 
 至此，第一组形成一条完整链：先在 [JIT 与 AOT](./jit-and-aot.md) 选择翻译时机，再由 [Binary Lifting](./binary-lifting.md) 恢复机器码结构，通过 [IR](./intermediate-representation.md) 分隔语义与后端，最后在本篇落到对象文件和链接产物。
 
+## 10. 产物也是下一阶段的不可信输入
+
+编译器和链接器从生产者角度构造 section、symbol 与 relocation；loader、分析器和更新工具从消费者角度必须验证每个偏移、长度和索引。调试信息还能携带递归类型与位置表达式，不能按“有符号所以可信”处理。相关结构与安全边界分别见 [可执行文件格式](../security-re/executable-formats.md) 和 [DWARF 与调试信息](../security-re/dwarf-and-debug-information.md)。
+
 ## 源码与官方文档入口
 
 - Hookshot [`nx2/build.py`](https://github.com/NotRexed/Hookshot/blob/ba005ca4fa179ccd2140f06f9308d0ff63894ff6/nx2/build.py)：当前 Clang 编译、对象缓存、并行调度与 LLD 链接。

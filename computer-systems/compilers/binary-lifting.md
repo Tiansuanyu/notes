@@ -135,6 +135,10 @@ Hookshot vendored 的 a64-kit 把每个 guest 函数建模为接收 `Ctx*` 的 C
 
 下一篇 [中间表示为何是翻译系统的核心](./intermediate-representation.md) 会对比：Hookshot 选择 C 作为可编译的中间载体，而 Dynarmic 使用自己的 typed SSA IR 连接 A64 frontend 与多个 host backend。
 
+## 9. 安全分析关心的是边界，而不只是可翻译性
+
+函数发现、CFG 和数据流也是逆向分析的基础，但安全结论还要追踪输入可控性、范围/权限检查和最终使用点。“成功提升并运行”不能证明 parser、guest memory 或 hostcall 边界安全；“找不到某个间接目标”也只是分析不完备，不能直接等同于恶意行为。证据分级与静态/动态互证见 [逆向工程的方法与证据](../security-re/reverse-engineering.md)，对象格式和 relocation 的解析边界见 [可执行文件格式](../security-re/executable-formats.md)。
+
 ## 源码阅读入口
 
 - Hookshot [`docs/design.md`](https://github.com/NotRexed/Hookshot/blob/ba005ca4fa179ccd2140f06f9308d0ff63894ff6/docs/design.md)：整体静态重编译边界；其中项目状态只对该 commit 成立。

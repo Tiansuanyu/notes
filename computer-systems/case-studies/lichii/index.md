@@ -41,4 +41,4 @@ flowchart TB
 - 只研究公开源码结构，不记录受保护程序、密钥、固件或规避保护的流程。
 - 性能结论必须附平台、构建选项、工作负载和采样方法；没有测量时只讨论结构，不猜测快慢。
 
-通用原理分别回到 [JIT/AOT 与 binary lifting 规划](../../compilers/)、[HLE 与操作系统规划](../../operating-systems/) 和 [图形与 GPU 规划](../../graphics-gpu/) 维护。
+通用原理分别回到 [JIT/AOT 与 binary lifting 规划](../../compilers/)、[HLE 与操作系统规划](../../operating-systems/) 和 [图形与 GPU 规划](../../graphics-gpu/) 维护。若从安全视角阅读，则沿 guest 寄存器/内存、SVC 参数、handle table、session 和 service handler 追踪信任边界；这是一套审计方法，不表示当前公开版本已确认存在具体漏洞，详见 [威胁模型与信任边界](../../security-re/threat-models-and-trust-boundaries.md)。

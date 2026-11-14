@@ -108,6 +108,10 @@ flowchart TB
 
 下一篇 [HLE 与兼容层](./hle-and-compatibility-layers.md) 继续解释为什么选择不同拦截层仍可能得到可用系统；[Guest 虚拟内存](./virtual-memory.md) 则展开 IPC buffer 和 guest 指针究竟如何被安全访问。
 
+## 7. IPC 检查要分清格式、对象与权限
+
+命令号和 buffer 长度合法只是格式验证；handle 还要属于当前进程、指向期望对象类型，并按 copy/move 规则维护生命周期；service 最后还要判断该主体能否执行该操作。这些检查分别位于不同层，不能用“消息解析成功”概括。可用 [威胁模型与信任边界](../security-re/threat-models-and-trust-boundaries.md) 的模板记录每次 guest→HLE 转换。
+
 ## 源码阅读入口
 
 - Lichii [`svc_ipc.cpp`](https://github.com/zortos293/Lichii/blob/9441129819edfee62e65ff6030749e80f420ba1e/src/core/hle/kernel/svc/svc_ipc.cpp)：session handle 检查、同步请求与 user buffer 生命周期。

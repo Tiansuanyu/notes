@@ -34,13 +34,13 @@ flowchart TB
 3. [编译器与程序翻译](./compilers/)：前端、IR、优化、JIT/AOT、binary lifting 与 shader 重编译。
 4. [图形与 GPU](./graphics-gpu/)：图形管线、光栅化、纹理、shader、GPU 架构、Vulkan 与同步。
 5. [异构计算](./heterogeneous-computing/)：比较 CPU、GPU、NPU，并深入昇腾 AI Core、存储层次与同步。
-6. [安全与逆向工程](./security-re/)：可执行文件、调试与逆向、secure boot、密码学边界。
+6. [安全与逆向工程](./security-re/)：从 ELF/DWARF 与逆向证据进入威胁模型、内存安全、解析器验证、密码学边界和可信启动。
 7. [源码案例](./case-studies/)：用 SPL、Lichii、Hookshot 与 TileLang-Ascend 连接原理和实现。
 8. [实验](./labs/)：通过自己的小程序验证汇编、HLE、软件光栅化和二进制翻译。
 
 ## 推荐路线
 
-先读 [程序如何真正运行](./foundations/how-programs-run.md)，再按“ISA/ABI → 进程与虚拟内存 → 编译器与 IR → GPU/NPU 执行”建立主干。进入 NPU 前建议先读 GPU 执行架构和编译器 IR，再沿“[CPU、GPU 与 NPU](./heterogeneous-computing/cpu-gpu-npu.md) → [AI Core](./heterogeneous-computing/ascend-ai-core.md) → [张量编译器](./compilers/tensor-compilers.md)”阅读。二进制提升、HLE、shader 重编译和 tensor codegen 都是综合题，案例笔记重点说“某个仓库如何组合这些原理”，不复制通用教程。
+先读 [程序如何真正运行](./foundations/how-programs-run.md)，再按“ISA/ABI → 进程与虚拟内存 → 编译器与 IR → GPU/NPU 执行”建立主干。进入 NPU 前建议先读 GPU 执行架构和编译器 IR，再沿“[CPU、GPU 与 NPU](./heterogeneous-computing/cpu-gpu-npu.md) → [AI Core](./heterogeneous-computing/ascend-ai-core.md) → [张量编译器](./compilers/tensor-compilers.md)”阅读。安全方向从 [可执行文件格式](./security-re/executable-formats.md) 开始，再沿“逆向证据 → 信任边界 → 内存与解析安全 → 验证 → Secure Boot”推进。二进制提升、HLE、shader 重编译和 tensor codegen 都是综合题，案例笔记重点说“某个仓库如何组合这些原理”，不复制通用教程。
 
 ## 源码基线
 

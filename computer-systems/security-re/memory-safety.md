@@ -52,13 +52,13 @@ Rust 的所有权、借用和类型系统使 safe Rust 排除大量越界、悬�
 
 Wasm module 通常在受控线性内存中运行，越界线性内存访问会 trap；宿主通过 import/export 显式连接能力。这能减小原生内存破坏面，但不能阻止无限计算、过量分配、panic、语义错误或危险宿主接口。
 
-ELF Analyzer Wasm 的实际边界可分为：浏览器提供 ELF 字节 → Rust/object/gimli 解析 → 应用递归展开 → 序列化返回 JavaScript。每一步都要限制输入、工作量与输出。Wasm 隔离主要约束“解析器出错后能触及什么”，不替代“解析是否正确和有界”。
+以通用文件分析器为例，边界可分为：宿主提供文件字节 → module 解析结构 → 应用展开对象 → 序列化返回宿主。每一步都要限制输入、工作量与输出。Wasm 隔离主要约束“解析器出错后能触及什么”，不替代“解析是否正确和有界”。
 
 ## 6. Guest/Host 指针不是普通 cast
 
 在模拟器或兼容层中，guest 地址属于 guest 的映射、权限和进程上下文。把数值转成 host pointer 之前，至少要验证范围、访问方向、跨页、映射状态和生命周期。详见 [Guest 虚拟内存](../operating-systems/virtual-memory.md)。
 
-同理，AresPlot 的设备地址是协议输入和 MCU 内存之间的能力边界；类型码与 payload 长度正确，只说明解释格式一致，不说明地址允许读取或写入。
+同理，设备调试协议中的地址字段位于外部输入和 MCU 内存之间；类型码与 payload 长度正确，只说明解释格式一致，不说明该地址允许读取或写入。更稳健的接口使用受限对象 ID 和设备侧权限表，而不是直接接受裸地址。
 
 ## 7. 防御不是单一工具
 
@@ -71,4 +71,3 @@ ELF Analyzer Wasm 的实际边界可分为：浏览器提供 ELF 字节 → Rust
 - [Rust：Understanding Ownership](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
 - [Rust Reference：Behavior considered undefined](https://doc.rust-lang.org/reference/behavior-considered-undefined.html)
 - [Clang AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)
-

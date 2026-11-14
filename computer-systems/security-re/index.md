@@ -40,10 +40,10 @@ flowchart TB
 6. [Fuzzing 与 Sanitizer](./fuzzing-and-sanitizers.md)：用自动生成输入和运行时检查检验实现。
 7. [密码学与 DRM 的边界](./cryptography-and-drm.md) 与 [Secure Boot](./secure-boot.md)：把算法、密钥、策略和启动链连接起来。
 
-## 贯穿案例
+## 贯穿案例与规范
 
-- **ELF Analyzer Wasm**：固定公开版本 `04ca131`，用于观察 Rust/Wasm 程序怎样解析 ELF 与 DWARF，也用于讨论深度限制、位置表达式覆盖和资源上限。源码中已有的检查是事实；潜在资源耗尽只是静态风险，未经 fuzz 或运行复现不称为漏洞。
-- **AresPlot / Web Serial Plotter**：固定公开版本 `bb1e018`，用于观察串口帧解析、校验和、变量地址读写及设备侧信任边界。帧合法不等于地址已授权，XOR 校验也不提供对主动攻击者的认证。
+- **ELF、DWARF 与 PE 官方规范**：用于区分文件布局、装载映像、调试条目和位置表达式；格式规范说明合法编码，不替代实现的资源限制与错误处理。
+- **LLVM Sanitizer 与 libFuzzer**：用于说明动态错误检测和覆盖引导测试的能力边界，不把一次无崩溃运行当作安全证明。
 - **Lichii 与 Hookshot**：分别用公开模拟器和静态重编译器说明 guest 输入如何跨越内存、SVC、IPC 与 host runtime 边界。实现不完整、目标化覆盖和已确认缺陷必须分开表述。
 - **PX4 Secure Boot**：只依据明确支持 secure-boot 的 board/build 变体解释签名固件链；不把某一飞控板的能力外推到全部 PX4 设备。
 

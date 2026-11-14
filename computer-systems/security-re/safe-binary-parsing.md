@@ -40,7 +40,7 @@ fn range(input: &[u8], offset: usize, size: usize) -> Result<&[u8], Error> {
 
 深度限制只约束最长路径，不约束树的宽度；输入大小限制也不总能限制解压或展开后的输出。资源预算要对应真正消耗的对象。
 
-ELF Analyzer Wasm 的递归深度上限是可确认防线，但它不自动回答总 DIE、数组元素与序列化结果是否有统一预算。这是应测试的设计问题，不是已确认漏洞。
+例如，DIE 类型图的递归深度上限是一条防线，但它不自动约束总 DIE、数组元素与序列化结果。解析器需要分别定义这些预算，并用超深与超宽输入验证失败路径。
 
 ## 4. 区间、索引和重叠
 
@@ -57,7 +57,7 @@ ELF Analyzer Wasm 的递归深度上限是可确认防线，但它不自动回�
 
 ## 5. 协议解析器要建模状态
 
-AresPlot 的 JavaScript 解析器以 SOP、command、length、payload、checksum、EOP 识别帧，并限制 payload；设备侧 C 客户端用状态机逐字节接收，再按命令检查 payload 形状。分层解析便于恢复串口分片和噪声。
+流式协议通常以帧头、命令、长度、payload、校验字段和帧尾识别消息，并用状态机处理分片与噪声。解析器既要限制 payload，也要明确遇到非法长度或校验失败时丢弃多少字节、从哪里重新同步。
 
 但协议状态还包括“当前是否允许监控”“变量是否已注册”“写命令是否被授权”。这些不能只靠语法状态机表达。更安全的资源模型是：
 
@@ -79,8 +79,8 @@ wire variable_id -> registry lookup -> {address, type, read/write policy}
 
 审计时记录“输入字段 → 变换 → 检查 → 使用点”，再为边界值、截断、溢出、未知 tag、超宽/超深结构、重复区间和状态错误建立 corpus。使用 [Fuzzing 与 Sanitizer](./fuzzing-and-sanitizers.md) 检查实现；用独立 parser 做差分时，先确认两者目标版本和容错策略相同。
 
-## 源码入口
+## 规范与验证入口
 
-- [ELF Analyzer Wasm `src/lib.rs`](https://github.com/CaptainKAZ/elf_analyzer_wasm/blob/04ca1316ad2c8459516dd34d5db153b2cc29008e/src/lib.rs)
-- AresPlot [`aresplot_protocol.js`](https://github.com/CaptainKAZ/web-serial-plotter/blob/bb1e018a431d05c81662f6513b36039b73ed2396/js/modules/aresplot_protocol.js) 与 [`aresplot_client.c`](https://github.com/CaptainKAZ/web-serial-plotter/blob/bb1e018a431d05c81662f6513b36039b73ed2396/aresplot_client.c)
-
+- [System V ABI：Object Files](https://refspecs.linuxfoundation.org/elf/gabi4%2B/ch4.intro.html)
+- [DWARF Version 5 Standard](https://dwarfstd.org/dwarf5std.html)
+- [LLVM libFuzzer](https://llvm.org/docs/LibFuzzer.html)

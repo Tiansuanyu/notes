@@ -35,18 +35,18 @@ flowchart TB
 
 编译器优化还可能让变量被常量传播、拆分或完全消除。此时“源码有变量”不保证任意断点都能读取一个连续内存地址。调试信息是编译器对优化结果的描述，不会强制机器为每个源码对象保留存储槽。
 
-## 3. ELF Analyzer Wasm 的明确覆盖范围
+## 3. DWARF 支持不是一个布尔值
 
-固定版本 [`src/lib.rs`](https://github.com/CaptainKAZ/elf_analyzer_wasm/blob/04ca1316ad2c8459516dd34d5db153b2cc29008e/src/lib.rs) 会遍历 unit/DIE，读取变量的名称、类型、文件、行和 location，并递归展开 base、pointer、array、struct/union/class、typedef、enum 与 qualifier。
+工具声称“支持 DWARF”时，还要继续问它覆盖哪些 tag、attribute、form、expression opcode 和 location list。只支持固定地址的变量查询器，与能够根据当前 PC、寄存器、frame base 和 location list 求值的 debugger，能力差异很大。
 
-源码直接可确认的限制是：变量位置只接受 `Exprloc` 且表达式中恰好得到一个 `Operation::Address`；`LocationListsRef` 等更一般形式没有变成可监控地址。结构体成员位置也主要处理常量 `Udata/Sdata`。所以它适合查找能归结为静态地址的变量，不是完整 DWARF debugger。
+类型展开同样需要明确边界：base、pointer、array、structure、typedef 和 qualifier 形成引用图；成员位置既可能是常量，也可能需要表达式求值。遇到不支持的形式应报告 unavailable/unsupported，而不是默认为地址零或伪造一个确定结果。
 
 | 结论 | 证据等级 |
 | --- | --- |
-| 代码只收集单一 `DW_OP_addr` 形式 | 源码事实 |
-| 优化构建中的许多局部变量可能不出现 | 由 DWARF 语义与实现范围支持的预期 |
-| 某个具体 ELF 必然漏掉某变量 | 需要用该文件和构建参数验证 |
-| 存在可利用漏洞 | 仅凭上述限制无法得出 |
+| 工具文档列出的 tag/opcode 覆盖范围 | 可直接核对的实现能力 |
+| 优化构建中的许多局部变量可能不可用 | 由 DWARF 语义支持的预期 |
+| 某个具体 ELF 必然能恢复某变量 | 需要结合文件、PC 与构建参数验证 |
+| 不支持某种表达式意味着存在漏洞 | 无法由功能缺失直接推出 |
 
 ## 4. 地址、类型与生命周期必须一起看
 
@@ -62,9 +62,9 @@ DWARF 解决“编译器怎样描述程序”的一部分，不提供设备访�
 
 ## 5. 解析器的资源与失败模型
 
-ELF Analyzer Wasm 定义了递归与大小计算的深度上限，这是显式防线；但静态检查还看不到统一的总节点、总数组元素、总字符串或执行时间预算。部分迭代路径使用 `unwrap`，而 release profile 配置 `panic = "abort"`。因此合理结论是：异常输入可能触发实例终止或资源压力的路径值得 fuzz；在未运行验证前，不把它写成已确认拒绝服务漏洞。
+DWARF 的引用图、数组和嵌套类型要求解析器同时限制递归深度、总节点数、字符串字节数、输出规模和执行时间。只有深度限制仍可能被非常宽的结构耗尽资源；只有文件大小限制也不一定约束展开后的对象数量。
 
-在 Wasm 中，线性内存隔离可缩小 host 进程被直接破坏的范围，但不能消除 CPU/内存耗尽、panic、错误结果和宿主导入接口风险。沙箱是额外边界，不是解析正确性的替代品。
+若解析器运行在 Wasm 等沙箱中，线性内存隔离可以缩小原生内存破坏的影响范围，但不能消除 CPU/内存耗尽、trap、错误结果和危险宿主导入接口。沙箱是额外边界，不是解析正确性的替代品。
 
 ## 6. 与逆向分析的关系
 
@@ -73,5 +73,4 @@ ELF Analyzer Wasm 定义了递归与大小计算的深度上限，这是显式�
 ## 参考资料
 
 - [DWARF Version 5 Standard](https://dwarfstd.org/dwarf5std.html)
-- [Gimli 文档](https://docs.rs/gimli/)
-- [ELF Analyzer Wasm 固定版本](https://github.com/CaptainKAZ/elf_analyzer_wasm/tree/04ca1316ad2c8459516dd34d5db153b2cc29008e)
+- [DWARF v5 PDF](https://dwarfstd.org/doc/DWARF5.pdf)

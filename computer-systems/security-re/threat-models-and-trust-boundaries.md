@@ -38,13 +38,11 @@ flowchart TB
     A --> E[执行操作]
 ```
 
-## 3. AresPlot：格式正确并不等于地址可访问
+## 3. 设备调试接口：格式正确并不等于地址可访问
 
-公开版本 [Web Serial Plotter `bb1e018`](https://github.com/CaptainKAZ/web-serial-plotter/tree/bb1e018a431d05c81662f6513b36039b73ed2396) 的 JavaScript 解析器为帧设置了 2048 字节上限，并检查 SOP、长度、XOR checksum、EOP 和命令形状。设备侧 `aresplot_client.c` 也限制监控变量数量并核对 payload 长度。这些是源码中可确认的格式与资源检查。
+考虑一个抽象的串口调试协议：帧包含命令、长度、payload 和 checksum，payload 可以请求读取或设置某个变量。长度和 checksum 检查只能回答帧是否完整、传输是否出现部分偶然错误，不能回答发送者身份，也不能授权任意内存访问。
 
-同一设备侧代码会把帧中的 32 位数值转为指针，用于监控读取或设置变量。静态阅读未看到这些 handler 对地址范围、对齐、读写权限或允许变量集合做白名单验证。准确表述应是：**固定版本的源码显示一个需要由部署信任假设兜底的地址访问边界**；是否可从外部到达、目标 MCU 如何处理非法访问、是否有外围认证，都需要具体系统测试，不能仅凭静态阅读宣布漏洞或影响等级。
-
-更稳健的协议应尽量发送受限的变量 ID，由设备把 ID 映射到预注册的地址、类型与操作权限，而不是让输入直接携带裸地址。
+安全设计应让线上消息携带受限的变量 ID，由设备在预注册表中查找地址、类型以及读写策略；若协议确实暴露地址，还必须验证允许区间、对齐、访问方向和设备状态。这个例子用于说明一般原则，不对应某个具体仓库或已确认漏洞。
 
 ## 4. Lichii：Guest 到 HLE 的多重边界
 
@@ -86,5 +84,4 @@ flowchart TB
 
 ## 源码入口
 
-- AresPlot [`aresplot_protocol.js`](https://github.com/CaptainKAZ/web-serial-plotter/blob/bb1e018a431d05c81662f6513b36039b73ed2396/js/modules/aresplot_protocol.js) 与 [`aresplot_client.c`](https://github.com/CaptainKAZ/web-serial-plotter/blob/bb1e018a431d05c81662f6513b36039b73ed2396/aresplot_client.c)
 - Lichii [`svc_ipc.cpp`](https://github.com/zortos293/Lichii/blob/9441129819edfee62e65ff6030749e80f420ba1e/src/core/hle/kernel/svc/svc_ipc.cpp) 与 [`k_server_session.cpp`](https://github.com/zortos293/Lichii/blob/9441129819edfee62e65ff6030749e80f420ba1e/src/core/hle/kernel/k_server_session.cpp)

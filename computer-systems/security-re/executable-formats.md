@@ -52,15 +52,11 @@ v = v_0 + (o-o_0).
 
 这也解释了 [Hookshot 的 Binary Lifting](../compilers/binary-lifting.md) 为什么先恢复模块、映射和重定位，再恢复函数：若地址含义尚未确定，控制流目标和数据引用都可能被误判。
 
-## 4. ELF Analyzer Wasm 怎样消费这些结构
+## 4. 对象格式解析器的责任分层
 
-公开仓库 [ELF Analyzer Wasm `04ca131`](https://github.com/CaptainKAZ/elf_analyzer_wasm/tree/04ca1316ad2c8459516dd34d5db153b2cc29008e) 在 `analyze_elf_recursively()` 中先用 Rust `object::File::parse()` 解析输入，再经 `gimli::DwarfSections::load()` 读取调试 section。这里有三层责任：
+一个对象文件分析器通常分成三层：底层验证 ELF/PE header、table 与区间；格式层解释 symbol、relocation 和 DWARF 编码；应用层再选择函数、变量或类型并生成输出。分层可以复用成熟实现，但不会自动消除边界问题。
 
-1. `object` 负责对象格式的结构解析；
-2. `gimli` 负责 DWARF 单元、条目和属性的编码语义；
-3. 应用层负责选择变量、解释位置和递归展开类型。
-
-使用成熟库减少了重复实现，但应用层仍必须约束输出规模、递归深度和支持的表达式。库能成功解析文件，不等于该文件的语义适合当前业务，也不等于资源消耗已受控。
+底层成功返回只说明输入符合它所检查的结构约束。应用层仍要限制遍历的节点数量、递归深度、字符串长度和最终输出规模，并明确自己支持哪些架构、重定位和调试表达式。格式合法、业务可用和资源有界是三个不同结论。
 
 ## 5. 不可信文件的结构检查
 
@@ -90,4 +86,3 @@ let bytes = input.get(offset..end).ok_or(ParseError::OutOfBounds)?;
 
 - [System V ABI：Object Files](https://refspecs.linuxfoundation.org/elf/gabi4%2B/ch4.intro.html) 与 [Program Loading](https://refspecs.linuxfoundation.org/elf/gabi4%2B/ch5.pheader.html)
 - [Microsoft PE Format](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format)
-- [ELF Analyzer Wasm `src/lib.rs`](https://github.com/CaptainKAZ/elf_analyzer_wasm/blob/04ca1316ad2c8459516dd34d5db153b2cc29008e/src/lib.rs)

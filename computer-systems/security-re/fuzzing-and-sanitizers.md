@@ -47,11 +47,11 @@ Rust parser 也值得 fuzz：目标不只是内存破坏，还包括 panic、极
 4. 序列化结果不得超出预算；
 5. 对同一输入重复执行结果应一致。
 
-seed corpus 应包含不同 class、endian、含/不含 DWARF、strip、截断和最小合法样本。mutation 不应只随机翻转：可以使用 dictionary 提供 ELF magic、DWARF tag/attribute 等格式 token。对 `ELF Analyzer Wasm`，还应分别测试 native Rust 核心与实际 Wasm/JavaScript 边界，因为 panic/资源表现可能不同。
+seed corpus 应包含不同 class、endian、含/不含 DWARF、strip、截断和最小合法样本。mutation 不应只随机翻转：可以使用 dictionary 提供 ELF magic、DWARF tag/attribute 等格式 token。若同一解析核心同时运行于 native 与 Wasm，还应分别测试两种边界，因为 panic、资源限制和宿主接口的表现可能不同。
 
 ## 4. 为流式协议设计目标
 
-AresPlot 解析器要面对 chunk boundary：同一帧一次送入、逐字节送入或随机分片，应得到相同解析结果。可验证的属性包括：
+流式协议解析器要面对 chunk boundary：同一帧一次送入、逐字节送入或随机分片，应得到相同解析结果。可验证的属性包括：
 
 - 任意 stream 不越过最大 payload 或无限增长 buffer；
 - 修改 checksum 后帧不会被当成完整合法帧；
